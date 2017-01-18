@@ -8,3 +8,4 @@ test
 yarrak
 
 barabara
+sws
