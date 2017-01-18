@@ -5,6 +5,3 @@ test
 
 1222
 
-yarrak
-
-barabara
