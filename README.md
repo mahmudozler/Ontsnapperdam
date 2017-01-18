@@ -1,15 +1,3 @@
 # Ontsnapperdam
-test
 
-1215
-
-1222
-yarrak
-
-barabara
-
-omar
-
-poep
-
-motherfucker!!
+**18/01/2017** - Started game, basic pawns made, menu beginning
