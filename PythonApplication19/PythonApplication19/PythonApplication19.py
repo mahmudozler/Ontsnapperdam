@@ -1,9 +1,18 @@
 import pygame
 
-size =(600,700)
+#class game:
+#	def __init__(self):
+size =(900,600)
 screen = pygame.display.set_mode(size)
 screen.fill((250,250,250))
 
+#		pygame.init()
+
+#		self.screen = pygame.display.set_mode(size)
+
+#		self.font = pygame.font.font(None ,30)
+
+		
 done = False
 
 class Player:
@@ -12,6 +21,12 @@ class Player:
 		self.x = x
 		self.y = y
 		self.r = r
+
+	def update(self):
+		keys = pygame.key.get_pressed()
+		if keys[pygame.K_LEFT]:
+			self.x -= 10
+
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(int(self.x),int(self.y)),int(self.r))
@@ -36,9 +51,13 @@ while not done:
 	player5.draw(screen)
 	player6=Player((0,0,0),350,100,20)
 	player6.draw(screen)
+		
+	player1.update()
+	
 
 	pygame.display.flip()
 
 
+	
 
 		
