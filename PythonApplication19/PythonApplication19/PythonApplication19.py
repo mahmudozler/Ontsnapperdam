@@ -43,24 +43,18 @@ class Player:
 	def throw(self):
 		return random.randint(1,6)
 
-class Turn:
+class Game:
 	def __init__(self,players):
 		self.turn = 0
 		self.steps = 0
 		self.players = players
-		self.thrown = 4
-		#if self.turn == 1:
+		self.thrown = 0
 
 	def Update(self,event):
-		#thrown = self.players[self.turn].throw()
-		#print(thrown)
 		if self.thrown == 0:
 			self.thrown = self.players[self.turn].throw()
 			print(self.thrown)
-			#print("yes")
 		if event.type == pygame.KEYDOWN:
-			#if event.key == pygame.K_LEFT:
-			#self.step += 1
 			self.steps += 1
 			self.players[self.turn].Update()
 			if self.steps == self.thrown:
@@ -73,27 +67,6 @@ class Turn:
 					print(self.thrown)
 				self.steps = 0
 
-"""def Update(key,player):
-
-	if key == pygame.K_LEFT:
-		screen.fill((250, 250, 250))
-		player.x -= 40
-		player.draw(screen)
-	elif key == pygame.K_RIGHT:
-		screen.fill((250, 250, 250))
-		player.x += 40
-		player.draw(screen)
-	elif key == pygame.K_UP:
-		screen.fill((250, 250, 250))
-		player.y -= 40
-		player.draw(screen)
-	elif key == pygame.K_DOWN:
-		screen.fill((250, 250, 250))
-		player.y += 40
-		player.draw(screen)"""
-
-
-
 player1 = Player("A",(155,255,140),300,30,13)
 player2 = Player("B",(155,255,140),340,30,13)
 player3 = Player("C",(91,183,211),380,30,13)
@@ -102,9 +75,7 @@ player5 = Player("E",(237,65,56),460,30,13)
 player6 = Player("F",(0,0,0),500,30,13)
 
 players = [player1,player2,player3,player4,player5,player6]
-turn = Turn(players)
-#first_throw = players[turn.turn].throw()
-#first_throw = 3
+game = Game(players)
 
 while not done:
 	for event in pygame.event.get():
@@ -112,11 +83,7 @@ while not done:
 			done = True
 		if event.type == pygame.KEYDOWN:
 			#players[turn.turn].Update()
-			turn.Update(event)
-	#if turn.turn == 0:
-		#players[turn.turn].Update()
-
-
+			game.Update(event)
 
 	#player draw
 	player1.draw(screen)
