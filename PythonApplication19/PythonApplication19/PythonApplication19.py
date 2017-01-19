@@ -41,31 +41,36 @@ class Player:
 				self.draw(screen)
 
 	def throw(self):
-		return random.randint(1,7)
+		return random.randint(1,6)
 
 class Turn:
 	def __init__(self,players):
 		self.turn = 0
 		self.steps = 0
 		self.players = players
+		self.thrown = 4
 		#if self.turn == 1:
 
 	def Update(self,event):
 		#thrown = self.players[self.turn].throw()
 		#print(thrown)
+		if self.thrown == 0:
+			self.thrown = self.players[self.turn].throw()
+			print(self.thrown)
+			#print("yes")
 		if event.type == pygame.KEYDOWN:
 			#if event.key == pygame.K_LEFT:
 			#self.step += 1
 			self.steps += 1
-			#print(self.steps)
-			#thrown = self.players[self.turn].throw()
-			#print(thrown)
 			self.players[self.turn].Update()
-			if self.steps == 4:
+			if self.steps == self.thrown:
+				print("steps done")
 				if self.turn == 5:
 					self.turn = 0
 				else:
 					self.turn += 1
+					self.thrown = self.players[self.turn].throw()
+					print(self.thrown)
 				self.steps = 0
 
 """def Update(key,player):
@@ -98,7 +103,8 @@ player6 = Player("F",(0,0,0),500,30,13)
 
 players = [player1,player2,player3,player4,player5,player6]
 turn = Turn(players)
-print(player1.throw())
+#first_throw = players[turn.turn].throw()
+#first_throw = 3
 
 while not done:
 	for event in pygame.event.get():
