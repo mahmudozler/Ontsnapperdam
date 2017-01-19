@@ -1,118 +1,56 @@
 import pygame
+from pygame.locals import *
+import sys
 import time
-import random
+
 
 pygame.init()
+width = 800
+height = 600
+img = pygame.image.load('start knop.png')
+img3 = pygame.image.load('exit knop.png')
+img2 = pygame.transform.smoothscale(img,(200, 70))
+img4 = pygame.transform.smoothscale(img3,(200,70))
+screen = pygame.display.set_mode((width,height))
 
-dwidth = 600
-dheight = 800
+
 
 black = (0,0,0)
-white = (255,255,255)
 red = (255,0,0)
+white = (255,255,255)
 
-bcolor = (53,115,255)
 
-cwidth = 73
 
-gameDisplay = pygame.display.set_mode((dwidth,dheight))
 pygame.display.set_caption('Ontsnapperdam')
-clock = pygame.time.Clock()
+screen.fill(white)
 
-diceImg = pygame.image.load('dobbelstenen.jpg')
+defaultfont = pygame.font.get_default_font()
+fontrenderer = pygame.font.Font(defaultfont,85)
 
-def things_dodged(count):
-    font = pygame.font.SysFont(None,25)
-    text = font.render("Dodged: "+str(count),True,black)
-    gameDisplay.blit(text,(0,0))
+label = fontrenderer.render("Ontsnapperdam",1,red)
 
-def things(thinga,thingb,thingc,thingd,color):
-    pygame.draw.rect(gameDisplay , color , [thinga,thingb,thingc,thingd])
+screen.blit(label,(40,15))
 
-def car(x,y):
-    gameDisplay.blit(diceImg,(x,y))
 
-def text_objects(text,font):
-    textSurface = font.render(text,True,black)
-    return textSurface , textSurface.get_rect()
 
-def message_display(text):
-    largeText = pygame.font.Font('Ontsnapperdam',115)
-    TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = ((dwidth/2),(dheight/2))
-    gameDisplay.blit(TextSurf,TextRect)
-
-    pygame.display.update()
-
-    time.sleep(2)
-
-    game_loop()
-
-def crash():
-    message_display('you lost')
-
-def game_intro():
-
-    intro = True
-
-    while intro:
-        for event in pygame.event.get():
-            print(event)
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-
-        gameDisplay.fill(white)
-        largeText = pygame.font.Font('Ontsnapperdam',115)
-        TextSurf,TextRect = text_objects("Ontsnapperdam",largeText)
-        TextRect.center = ((dwidth/2),(dheight/2))
-        gameDisplay.blit(TextSurf,TextRect)
-        pygame.display.update()
-        clock.tick(15)
-
-def game_loop():
-    x = (dwidth * 0.45)
-    y = (dheight * 0.8)
-
-    x_change = 0
-
-    thing_starta = random.randrange(0,dwidth)
-    thing_startb = -600
-    thing_speed = 4
-    thing_width = 100
-    thing_height = 100
-
-    thingCount = 1
-
-    dodged = 0
-
-    gameExit = False
-
-    while not gameExit:
-
+def mainloop():
+    running = True
+    while running:
+        screen.blit(img2,(300,250))
+        screen.blit(img4,(300,350))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mousex, mousey = pygame.mouse.get_pos()
+                if 300 <= mousex and 500 >= mousex and 250 <= mousey and 320 >= mousey:
+                    print("skip")
+                elif 300 <= mousex and 500 >= mousex and 350 <= mousey and 420 >= mousey:
+                    running = False
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    x_change = -5
-                if event.key == pygame.K_RIGHT:
-                    x_change = 5
 
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                    x_change = 0
+        pygame.display.flip()
 
-        x += x_change
-        gameDisplay.fill(white)
-
-        things(thing_starta,thing_startb,thing_width,thing_height,bcolor)
-
-        game_intro()
-        game_loop()
-        pygame.quit()
-        quit()
+print(mainloop())
 
 
