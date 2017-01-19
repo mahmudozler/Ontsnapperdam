@@ -1,7 +1,8 @@
 import pygame
 
-#class game:
-#	def __init__(self):
+pygame.init()
+
+
 size =(900,600)
 screen = pygame.display.set_mode(size)
 screen.fill((250,250,250))
@@ -16,7 +17,8 @@ screen.fill((250,250,250))
 done = False
 
 class Player:
-	def __init__(self,kleur,x,y,r):
+	def __init__(self,name,kleur,x,y,r):
+		self.name = name
 		self.kleur = kleur
 		self.x = x
 		self.y = y
@@ -43,20 +45,30 @@ def Update(key,player):
 		player.y += 40
 		player.draw(screen)
 
+class Turn:
+	def __init__(self,players):
+		self.players = players
 
-player1 = Player((155,255,140),300,30,13)
-player2 = Player((155,255,140),340,30,13)
-player3 = Player((91,183,211),380,30,13)
-player4 = Player((116,59,124),420,30,13)
-player5 = Player((237,65,56),460,30,13)
-player6 = Player((0,0,0),500,30,13)
+
+player1 = Player("A",(155,255,140),300,30,13)
+player2 = Player("B",(155,255,140),340,30,13)
+player3 = Player("C",(91,183,211),380,30,13)
+player4 = Player("D",(116,59,124),420,30,13)
+player5 = Player("E",(237,65,56),460,30,13)
+player6 = Player("F",(0,0,0),500,30,13)
+
+players = [player1,player2,player3]
+turn = Turn(players)
+
+for x in turn.players:
+	print(x.name)
 
 while not done:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			done = True
 		if event.type == pygame.KEYDOWN:
-			Update(event.key,player3)
+			Update(event.key,player1)
 
 
 	#player draw
