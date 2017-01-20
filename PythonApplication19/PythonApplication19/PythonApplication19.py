@@ -73,6 +73,18 @@ class Game:
 					self.turn += 1
 				self.steps = 0
 
+
+def Filter(x,y):
+	map_list = [[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],[0,9,19],[0,9,10,19],[0,10,19],[0,10,19],
+				[0,1,2,4,5,6,7,8,9,10,11,12,13,19],[0,2,4,8,13,17,18,19],[0,2,3,4,8,13,17,19],[0,4,8,11,12,13,14,15,16,17,19],[0,4,8,11,19],
+				[0,4,5,6,7,8,11,13,14,15,16,17,18,19],[0,6,11,12,13,16,19],[0,6,13,14,15,16,19],[0,3,4,5,6,13,16,19],[0,3,6,7,8,9,10,11,12,13,16,17,18,19],
+				[0,1,2,3,6,13,16,19],[0,3,6,13,16,19],[0,3,6,7,8,9,13,14,15,16,19],[0,2,3,4,5,6,9,13,19],[0,2,9,13,19],[0,2,9,10,11,12,13,19],[0,2,3,4,5,6,13,19],[0,6,13,14,15,19],
+				[0,6,15,19],[0,6,7,8,9,10,11,12,13,14,15,19],[0,1,2,3,4,5,6,8,15,19],[3,8,13,14,15,19],[3,8,13,19],[3,8,13,19],[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]]
+	total = len(map_list)
+	if x in map_list[y]:
+		return True
+	return False
+
 player1 = Player("A",(155,255,140),210,38,10.5)
 player2 = Player("B",(155,255,140),236,38,10.5)
 player3 = Player("C",(91,183,211),262,38,10.5)
@@ -113,21 +125,11 @@ while not done:
 	pygame.draw.rect(screen, (0, 0, 0), (10, 10, 50, 50), 1)
 
 	#grid
-	for row in range(30):
+	"""for row in range(30):
 		for col in range(20):
-			color = (0, 0, 0)
-			if row == 0 or (row == 29 and col > 2) or (col == 0 and row < 26) or col == 19 or (col == 10 and row == 1) or (col == 10 and row == 2) or (col == 11 and row > 1 and row < 5) \
-			or (col == 11 and row == 3) or (col == 11 and row == 5) or (row == 5 and col > 3 and col < 14) or (row == 5 and col < 3)\
-			or (col == 2 and row > 5 and row < 8) or (row > 5 and row < 11 and col == 4) or (row > 5 and row < 11 and col == 8) or (col == 3 and row == 7)\
-			or (row > 4 and row < 9 and col == 14) or (col > 11 and col < 18 and row == 8) or (row > 5 and row < 9 and col == 17)\
-			or (row == 6 and col == 18) or (row > 7 and row < 12 and col == 11) or (row == 10 and col > 12) or (row > 9 and row < 23 and col == 13)\
-			or (row > 9 and row < 18 and col == 16) or (row > 9 and row < 19 and col == 6) or (col > 3 and col < 9 and row == 10) or (row == 13 and col > 2 and col < 7)\
-			or (row > 12 and row < 19 and col == 3) or (row == 18 and col > 1 and col < 7) or (col > 5 and col < 14 and row == 14) or (row > 17 and row < 22 and col == 2)\
-			or (row == 21 and col > 1 and col < 7) or (row == 25 and col < 7) or (col == 6 and row > 20 and row < 26) or (row == 24 and col > 5 and col < 16)\
-			or (col == 3 and row > 24) or (col == 8 and row > 23) or (col == 13 and row > 25) or (row == 20 and col > 8 and col < 14) or (row > 16 and row < 21 and col == 9)\
-			or (col == 15 and row > 21 and row < 27) or (row == 22 and col == 14) or (row == 26 and col == 14) or (row == 17 and col > 13 and col < 16) or (row == 12 and col > 13 and col < 16)\
-			or (row == 11 and col == 12) or (row == 17 and col > 6 and col < 9) or (row == 15 and col > 0 and col < 3) or (row == 14 and col > 16 and col < 19):
-				pygame.draw.rect(screen, color, ((w + m) * col + (m + 40), ((h + m) * row + m) + 50, w, h), 1)
+			if Filter(col,row):
+				color = (0,0,0)
+				pygame.draw.rect(screen, color, ((w + m) * col + (m + 40), ((h + m) * row + m) + 50, w, h), 1)"""
 
 	pygame.display.flip()
 
