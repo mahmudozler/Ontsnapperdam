@@ -104,8 +104,3 @@ while not done:
 	pygame.draw.rect(screen, (0, 0, 0), (10, 10, 50, 50), 1)
 
 	pygame.display.flip()
-
-
-	
-
-		
