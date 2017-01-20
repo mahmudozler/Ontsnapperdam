@@ -116,11 +116,18 @@ while not done:
 	for row in range(30):
 		for col in range(20):
 			color = (0, 0, 0)
-			"""if row == 0:
-				#color = (0, 255, 0)
+			if row == 0 or (row == 29 and col > 2) or (col == 0 and row < 26) or col == 19 or (col == 10 and row == 1) or (col == 10 and row == 2) or (col == 11 and row > 1 and row < 5) \
+			or (col == 11 and row == 3) or (col == 11 and row == 5) or (row == 5 and col > 3 and col < 14) or (row == 5 and col < 3)\
+			or (col == 2 and row > 5 and row < 8) or (row > 5 and row < 11 and col == 4) or (row > 5 and row < 11 and col == 8) or (col == 3 and row == 7)\
+			or (row > 4 and row < 9 and col == 14) or (col > 11 and col < 18 and row == 8) or (row > 5 and row < 9 and col == 17)\
+			or (row == 6 and col == 18) or (row > 7 and row < 12 and col == 11) or (row == 10 and col > 12) or (row > 9 and row < 23 and col == 13)\
+			or (row > 9 and row < 18 and col == 16) or (row > 9 and row < 19 and col == 6) or (col > 3 and col < 9 and row == 10) or (row == 13 and col > 2 and col < 7)\
+			or (row > 12 and row < 19 and col == 3) or (row == 18 and col > 1 and col < 7) or (col > 5 and col < 14 and row == 14) or (row > 17 and row < 22 and col == 2)\
+			or (row == 21 and col > 1 and col < 7) or (row == 25 and col < 7) or (col == 6 and row > 20 and row < 26) or (row == 24 and col > 5 and col < 16)\
+			or (col == 3 and row > 24) or (col == 8 and row > 23) or (col == 13 and row > 25) or (row == 20 and col > 8 and col < 14) or (row > 16 and row < 21 and col == 9)\
+			or (col == 15 and row > 21 and row < 27) or (row == 22 and col == 14) or (row == 26 and col == 14) or (row == 17 and col > 13 and col < 16) or (row == 12 and col > 13 and col < 16)\
+			or (row == 11 and col == 12) or (row == 17 and col > 6 and col < 9) or (row == 15 and col > 0 and col < 3) or (row == 14 and col > 16 and col < 19):
 				pygame.draw.rect(screen, color, ((w + m) * col + (m + 40), ((h + m) * row + m) + 50, w, h), 1)
-			else:"""
-			pygame.draw.rect(screen, color, ((w + m) * col + (m + 40), ((h + m) * row + m) + 50, w, h), 1)
 
 	pygame.display.flip()
 
