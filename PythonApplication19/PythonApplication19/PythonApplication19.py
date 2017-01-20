@@ -4,8 +4,8 @@ import random
 pygame.init()
 
 size =(600,850)
-screen = pygame.display.set_mode(size)
-screen.fill((250,250,250))
+#screen = pygame.display.set_mode(size)
+#screen.fill((250,250,250))
 
 w = 25
 h = 25
@@ -25,7 +25,7 @@ class Player:
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(int(self.x),int(self.y)),int(self.r))
 
-	def Update(self):
+	def Update(self,screen):
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
 				screen.fill((250, 250, 250))
@@ -50,22 +50,25 @@ class Player:
 
 class Game:
 	def __init__(self,players):
+		pygame.init()
 		self.turn = 0
 		self.steps = 0
 		self.players = players
 		self.thrown = 0
+
+		self.size = (600, 850)
+		self.screen = pygame.display.set_mode(size)
 
 	def Update(self,event):
 		player = self.players[self.turn]
 		if event.type == pygame.KEYDOWN:
 			#Add arrow key constraints
 			self.steps += 1
-			player.Update()
+			player.Update(self.screen)
 
 			#if all steps made
 			if self.steps == self.thrown:
 				self.thrown = 0
-				#print("next dice")
 				print(player.Pos())
 				if self.turn == 5:
 					self.turn = 0
@@ -73,17 +76,35 @@ class Game:
 					self.turn += 1
 				self.steps = 0
 
+	def Filter(self,x,y):
+		map_list = [[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],[0,9,19],[0,9,10,19],[0,10,19],[0,10,19],
+					[0,1,2,4,5,6,7,8,9,10,11,12,13,19],[0,2,4,8,13,17,18,19],[0,2,3,4,8,13,17,19],[0,4,8,11,12,13,14,15,16,17,19],[0,4,8,11,19],
+					[0,4,5,6,7,8,11,13,14,15,16,17,18,19],[0,6,11,12,13,16,19],[0,6,13,14,15,16,19],[0,3,4,5,6,13,16,19],[0,3,6,7,8,9,10,11,12,13,16,17,18,19],
+					[0,1,2,3,6,13,16,19],[0,3,6,13,16,19],[0,3,6,7,8,9,13,14,15,16,19],[0,2,3,4,5,6,9,13,19],[0,2,9,13,19],[0,2,9,10,11,12,13,19],[0,2,3,4,5,6,13,19],[0,6,13,14,15,19],
+					[0,6,15,19],[0,6,7,8,9,10,11,12,13,14,15,19],[0,1,2,3,4,5,6,8,15,19],[3,8,13,14,15,19],[3,8,13,19],[3,8,13,19],[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]]
+		if x in map_list[y]:
+			return True
+		return False
 
-def Filter(x,y):
-	map_list = [[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],[0,9,19],[0,9,10,19],[0,10,19],[0,10,19],
-				[0,1,2,4,5,6,7,8,9,10,11,12,13,19],[0,2,4,8,13,17,18,19],[0,2,3,4,8,13,17,19],[0,4,8,11,12,13,14,15,16,17,19],[0,4,8,11,19],
-				[0,4,5,6,7,8,11,13,14,15,16,17,18,19],[0,6,11,12,13,16,19],[0,6,13,14,15,16,19],[0,3,4,5,6,13,16,19],[0,3,6,7,8,9,10,11,12,13,16,17,18,19],
-				[0,1,2,3,6,13,16,19],[0,3,6,13,16,19],[0,3,6,7,8,9,13,14,15,16,19],[0,2,3,4,5,6,9,13,19],[0,2,9,13,19],[0,2,9,10,11,12,13,19],[0,2,3,4,5,6,13,19],[0,6,13,14,15,19],
-				[0,6,15,19],[0,6,7,8,9,10,11,12,13,14,15,19],[0,1,2,3,4,5,6,8,15,19],[3,8,13,14,15,19],[3,8,13,19],[3,8,13,19],[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]]
-	total = len(map_list)
-	if x in map_list[y]:
-		return True
-	return False
+	def Draw(self):
+		#draw canvas
+		self.screen.fill((255, 255, 255))
+
+		#draw dice
+		pygame.draw.rect(self.screen, (0, 0, 0), (10, 10, 50, 50), 1)
+
+		#draw all player
+		for player in self.players:
+			player.draw(self.screen)
+
+		#draw game board
+		for row in range(30):
+			for col in range(20):
+				if self.Filter(col, row):
+					color = (0, 0, 0)
+					pygame.draw.rect(self.screen, color, ((w + m) * col + (m + 40), ((h + m) * row + m) + 50, w, h), 1)
+
+
 
 player1 = Player("A",(155,255,140),210,38,10.5)
 player2 = Player("B",(155,255,140),236,38,10.5)
@@ -113,23 +134,11 @@ while not done:
 			if game.thrown > 0:
 				game.Update(event)
 
-	#player draw initial position
-	player1.draw(screen)
-	player2.draw(screen)
-	player3.draw(screen)
-	player4.draw(screen)
-	player5.draw(screen)
-	player6.draw(screen)
-
 	# dice
-	pygame.draw.rect(screen, (0, 0, 0), (10, 10, 50, 50), 1)
+	#pygame.draw.rect(screen, (0, 0, 0), (10, 10, 50, 50), 1)
 
 	#grid
-	"""for row in range(30):
-		for col in range(20):
-			if Filter(col,row):
-				color = (0,0,0)
-				pygame.draw.rect(screen, color, ((w + m) * col + (m + 40), ((h + m) * row + m) + 50, w, h), 1)"""
+	game.Draw()
 
 	pygame.display.flip()
 
