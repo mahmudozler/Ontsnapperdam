@@ -6,12 +6,12 @@ pygame.init()
 done = False
 
 class Player:
-	def __init__(self,name,kleur,x,y,r):
+	def __init__(self,name,kleur,x,y):
 		self.name = name
 		self.kleur = kleur
 		self.x = x
 		self.y = y
-		self.r = r
+		self.r = 10.5
 		self.counter = 0
 
 	def draw(self,screen):
@@ -38,8 +38,9 @@ class Player:
 
 
 	def Pos(self):
-		pos = str(self.x) + " - " + str(self.y)
-		return pos
+		#pos = str(self.x) + " - " + str(self.y)
+		#return pos
+		return self.x,self.y
 
 class Game:
 	def __init__(self,players):
@@ -48,7 +49,7 @@ class Game:
 		self.steps = 0
 		self.players = players
 		self.thrown = 0
-		self.size = (600,850)
+		self.size = (800,850)
 		self.running = False
 
 		#block width,height,margin
@@ -56,8 +57,7 @@ class Game:
 		self.h = 25
 		self.m = 1
 
-		self.size = (600, 850)
-		self.screen = pygame.display.set_mode(self.size)
+		#self.screen = pygame.display.set_mode(self.size)
 
 	def Update(self,event):
 		player = self.players[self.turn]
@@ -70,6 +70,7 @@ class Game:
 			if self.steps == self.thrown:
 				self.thrown = 0
 				print(player.Pos())
+				#pygame.Rect.collidepoint(100,100)
 				if self.turn == (len(self.players) - 1):
 					self.turn = 0
 				else:
@@ -89,6 +90,7 @@ class Game:
 	def Draw(self):
 
 		#draw canvas
+		self.screen = pygame.display.set_mode(self.size)
 		self.screen.fill((255, 255, 255))
 
 		#draw dice
@@ -110,7 +112,7 @@ class Game:
 
 	def Gameloop(self):
 
-		game.Draw()
+		self.Draw()
 
 		while not self.running:
 			for event in pygame.event.get():
@@ -128,16 +130,16 @@ class Game:
 				if event.type == pygame.KEYDOWN:
 					if self.thrown > 0:
 						self.Update(event)
-			game.Draw()
+			self.Draw()
 
 
 
-player1 = Player("A",(155,255,140),210,38,10.5)
-player2 = Player("B",(155,255,140),236,38,10.5)
-player3 = Player("C",(91,183,211),262,38,10.5)
-player4 = Player("D",(116,59,124),288,38,10.5)
-player5 = Player("E",(237,65,56),314,38,10.5)
-player6 = Player("F",(0,0,0),340,38,10.5)
+player1 = Player("A",(155,255,140),210,38)
+player2 = Player("B",(155,255,140),236,38)
+player3 = Player("C",(91,183,211),262,38)
+player4 = Player("D",(116,59,124),288,38)
+player5 = Player("E",(237,65,56),314,38)
+player6 = Player("F",(0,0,0),340,38)
 
 players = [player1,player2,player3,player4]
 
