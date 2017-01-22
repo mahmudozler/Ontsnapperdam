@@ -11,35 +11,38 @@ class Player:
 		self.kleur = kleur
 		self.x = x
 		self.y = y
-		self.r = 10.5
+		self.r = 10
+		# to keep position and size
+		self.rect = pygame.Rect(self.x, self.y, 20, 20)
+
 		self.counter = 0
 
 	def draw(self,screen):
-		pygame.draw.circle(screen,self.kleur,(int(self.x),int(self.y)),int(self.r))
+		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
 
-	def Update(self,screen,event):
+	def Update(self,screen,event,blocks):
 		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_LEFT:
-				#screen.fill((250, 250, 250))
-				self.x -= 26
-				self.draw(screen)
-			elif event.key == pygame.K_RIGHT:
-				#screen.fill((250, 250, 250))
-				self.x += 26
-				self.draw(screen)
-			elif event.key == pygame.K_UP:
-				#screen.fill((250, 250, 250))
-				self.y -= 26
-				self.draw(screen)
-			elif event.key == pygame.K_DOWN:
-				screen.fill((250, 250, 250))
-				self.y += 26
-				self.draw(screen)
+			# to check the new position is within the game blocks
+			newpos = self.rect.copy()
 
+			if event.key == pygame.K_LEFT:
+				newpos.x -= 26
+			elif event.key == pygame.K_RIGHT:
+				newpos.x += 26
+			elif event.key == pygame.K_UP:
+				newpos.y -= 26
+			elif event.key == pygame.K_DOWN:
+				newpos.y += 26
+
+			# check is newpos is inside game rectangles
+			for rectangle in blocks:
+				if newpos.colliderect(rectangle):
+					# convert newpos in the new position
+					self.rect = newpos
+					# stop check when matched
+					break
 
 	def Pos(self):
-		#pos = str(self.x) + " - " + str(self.y)
-		#return pos
 		return self.x,self.y
 
 class Game:
@@ -58,19 +61,25 @@ class Game:
 		self.m = 1
 
 		#self.screen = pygame.display.set_mode(self.size)
+		self.blocks = []
+
+		#Create list with all block position in the game
+		for row in range(30):
+			for col in range(30):
+				if self.Filter(col, row):
+					self.blocks.append(pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50), self.w, self.h))
 
 	def Update(self,event):
 		player = self.players[self.turn]
 		if event.type == pygame.KEYDOWN:
 			#Add arrow key constraints
 			self.steps += 1
-			player.Update(self.screen,event)
+			player.Update(self.screen,event,self.blocks)
 
 			#if all steps made
 			if self.steps == self.thrown:
 				self.thrown = 0
 				print(player.Pos())
-				#pygame.Rect.collidepoint(100,100)
 				if self.turn == (len(self.players) - 1):
 					self.turn = 0
 				else:
@@ -101,11 +110,8 @@ class Game:
 			player.draw(self.screen)
 
 		#draw game board
-		for row in range(30):
-			for col in range(20):
-				if self.Filter(col, row):
-					color = (0, 0, 0)
-					pygame.draw.rect(self.screen, color, ((self.w + self.m) * col + (self.m + 40), ((self.h + self.m) * row + self.m) + 50, self.w, self.h),1)
+		for rectangle in self.blocks:
+			pygame.draw.rect(self.screen, (0,0,0), rectangle, 1)
 
 		#update whole screen
 		pygame.display.flip()
@@ -130,21 +136,26 @@ class Game:
 				if event.type == pygame.KEYDOWN:
 					if self.thrown > 0:
 						self.Update(event)
-			self.Draw()
+
+						self.Draw()
+			#pygame.display.flip()
 
 
 
-player1 = Player("A",(155,255,140),210,38)
-player2 = Player("B",(155,255,140),236,38)
-player3 = Player("C",(91,183,211),262,38)
-player4 = Player("D",(116,59,124),288,38)
-player5 = Player("E",(237,65,56),314,38)
-player6 = Player("F",(0,0,0),340,38)
+player1 = Player("A",(155,255,140),200,28)
+player2 = Player("B",(155,255,140),226,28)
+player3 = Player("C",(91,183,211),252,28)
+player4 = Player("D",(116,59,124),278,28)
+player5 = Player("E",(237,65,56),304,28)
+player6 = Player("F",(0,0,0),330,28)
 
 players = [player1,player2,player3,player4]
 
 game = Game(players)
+for x in game.blocks:
+	print(x)
 game.Gameloop()
+
 
 
 	
