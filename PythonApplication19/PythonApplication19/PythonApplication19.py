@@ -58,13 +58,20 @@ class Game:
 		self.h = 25
 		self.m = 1
 
+		#colors
+		self.red = (191,36,36)
+		self.black = (23,20,20)
+
 		#self.screen = pygame.display.set_mode(self.size)
 		self.blocks = []
+		self.battleblocks = []
 
 		#Create list with all block position in the game
 		for row in range(30):
 			for col in range(30):
-				if self.Filter(col, row):
+				if self.Filter(col, row) == "battleblock":
+					self.battleblocks.append(pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50), self.w, self.h))
+				elif self.Filter(col, row) == "normalblock":
 					self.blocks.append(pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50), self.w, self.h))
 
 	def Update(self,event):
@@ -88,10 +95,12 @@ class Game:
 					[0,4,5,6,7,8,11,13,14,15,16,17,18,19],[0,6,11,12,13,16,19],[0,6,13,14,15,16,19],[0,3,4,5,6,13,16,19],[0,3,6,7,8,9,10,11,12,13,16,17,18,19],
 					[0,1,2,3,6,13,16,19],[0,3,6,13,16,19],[0,3,6,7,8,9,13,14,15,16,19],[0,2,3,4,5,6,9,13,19],[0,2,9,13,19],[0,2,9,10,11,12,13,19],[0,2,3,4,5,6,13,19],[0,6,13,14,15,19],
 					[0,6,15,19],[0,6,7,8,9,10,11,12,13,14,15,19],[0,1,2,3,4,5,6,8,15,19],[3,8,13,14,15,19],[3,8,13,19],[3,8,13,19],[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]]
-		Battle_blocks = [[],[],[],[0],[0],[0,1],[0],[13,17],[8,13,14,15,16,17],[8],[7,8],[],[13,14],[13],
-			[13],[13],[13],[13,14],[],[],[],[],[],[],[],[3,4,5,6],[3,13],[13],[13],[11,12,13]]
-		if x in map_list[y]:
-			return True
+		battle_blocks = [[],[],[],[0],[0],[0,1],[0],[13,17],[8,13,14,15,16,17],[8],[7,8],[],[13,14],[3,4,5,6,13],
+			[3,6,13],[13],[13],[13,14],[],[],[],[],[],[],[],[3,4,5,6],[3,13],[13],[13],[11,12,13]]
+		if x in battle_blocks[y]:
+			return "battleblock"
+		elif x in map_list[y]:
+			return "normalblock"
 		return False
 
 	def Draw(self):
@@ -109,7 +118,9 @@ class Game:
 
 		#draw game board
 		for rectangle in self.blocks:
-			pygame.draw.rect(self.screen, (0,0,0), rectangle, 1)
+			pygame.draw.rect(self.screen, self.black, rectangle, 1)
+		for rectangle in self.battleblocks:
+			pygame.draw.rect(self.screen, self.red, rectangle, 1)
 
 		#update whole screen
 		pygame.display.flip()
@@ -150,8 +161,7 @@ player6 = Player("F",(0,0,0),330,28)
 players = [player1,player2,player3,player4]
 
 game = Game(players)
-for x in game.blocks:
-	print(x)
+
 game.Gameloop()
 
 
