@@ -12,10 +12,8 @@ class Player:
 		self.x = x
 		self.y = y
 		self.r = 10
-		# to keep position and size
 		self.rect = pygame.Rect(self.x, self.y, 20, 20)
-
-		self.counter = 0
+		self.steps = 0
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
@@ -34,10 +32,11 @@ class Player:
 			elif event.key == pygame.K_DOWN:
 				newpos.y += 26
 
-			# check is newpos is inside game rectangles
+			# bool check is newpos is inside game rectangles
 			for rectangle in blocks:
 				if newpos.colliderect(rectangle):
 					# convert newpos in the new position
+					self.steps += 1
 					self.rect = newpos
 					# stop check when matched
 					break
@@ -49,7 +48,6 @@ class Game:
 	def __init__(self,players):
 		pygame.init()
 		self.turn = 0
-		self.steps = 0
 		self.players = players
 		self.thrown = 0
 		self.size = (800,850)
@@ -72,19 +70,17 @@ class Game:
 	def Update(self,event):
 		player = self.players[self.turn]
 		if event.type == pygame.KEYDOWN:
-			#Add arrow key constraints
-			self.steps += 1
 			player.Update(self.screen,event,self.blocks)
 
 			#if all steps made
-			if self.steps == self.thrown:
+			if player.steps == self.thrown:
 				self.thrown = 0
 				print(player.Pos())
 				if self.turn == (len(self.players) - 1):
 					self.turn = 0
 				else:
 					self.turn += 1
-				self.steps = 0
+				player.steps = 0
 
 	def Filter(self,x,y):
 		map_list = [[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],[0,9,19],[0,9,10,19],[0,10,19],[0,10,19],
