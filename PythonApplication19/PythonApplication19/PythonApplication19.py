@@ -60,7 +60,7 @@ class Game:
 		self.running = False
 
 		#game pic location
-		self.img = pygame.image.load('camuflage.gif')
+		self.img = pygame.image.load('img/Fiches.jpg')
 
 		#block width,height,margin
 		self.w = 25
