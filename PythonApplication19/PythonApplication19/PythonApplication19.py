@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import *
 import random
 
 pygame.init()
@@ -57,6 +58,9 @@ class Game:
 		self.thrown = 0
 		self.size = (800,850)
 		self.running = False
+
+		#game pic location
+		self.img = pygame.image.load('camuflage.gif')
 
 		#block width,height,margin
 		self.w = 25
@@ -117,6 +121,8 @@ class Game:
 		#draw canvas
 		self.screen = pygame.display.set_mode(self.size)
 		self.screen.fill((255, 255, 255))
+
+		self.screen.blit(self.img,(0,0))
 
 		#draw dice
 		pygame.draw.rect(self.screen, (0, 0, 0), (10, 10, 50, 50), 1)
