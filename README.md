@@ -7,3 +7,5 @@
 **20/01/2017** - Prototype grid added, dice added, game menu updated, database implemented
 
 **22/01/2017** - Player can only walk on grid now!
+
+**23/01/2017** - Battle zones added 

@@ -18,7 +18,7 @@ class Player:
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
 
-	def Update(self,screen,event,blocks):
+	def Update(self,screen,event,blocks,battleblocks):
 		if event.type == pygame.KEYDOWN:
 			# to check the new position is within the game blocks
 			newpos = self.rect.copy()
@@ -35,9 +35,14 @@ class Player:
 			# bool check is newpos is inside game rectangles
 			for rectangle in blocks:
 				if newpos.colliderect(rectangle):
+					print(newpos)
 					# convert newpos in the new position
 					self.steps += 1
 					self.rect = newpos
+					for rectangle in battleblocks:
+						if newpos.colliderect(rectangle):
+							print("LETS BATTLE!")
+							break
 					# stop check when matched
 					break
 
@@ -77,12 +82,11 @@ class Game:
 	def Update(self,event):
 		player = self.players[self.turn]
 		if event.type == pygame.KEYDOWN:
-			player.Update(self.screen,event,self.blocks)
+			player.Update(self.screen,event,(self.blocks + self.battleblocks),self.battleblocks)
 
 			#if all steps made
 			if player.steps == self.thrown:
 				self.thrown = 0
-				print(player.Pos())
 				if self.turn == (len(self.players) - 1):
 					self.turn = 0
 				else:
@@ -138,7 +142,8 @@ class Game:
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					mousex, mousey = pygame.mouse.get_pos()
 					if mousex > 10 and mousex < 60 and mousey > 10 and mousey < 60:
-						self.thrown = random.randint(1, 6)
+						if self.thrown == 0:
+							self.thrown = random.randint(1, 6)
 						print(self.thrown)
 
 				# execute if dice is thrown
@@ -161,6 +166,8 @@ player6 = Player("F",(0,0,0),330,28)
 players = [player1,player2,player3,player4]
 
 game = Game(players)
+for x in game.battleblocks:
+	print(x)
 
 game.Gameloop()
 
