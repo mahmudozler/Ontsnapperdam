@@ -164,7 +164,10 @@ class Game:
 		self.m = 1
 
 		#font
-		myfont = self.screen.font.SysFont("Comic Sans MS", 30)
+		self.font = pygame.font.SysFont("comicsansms", 57)
+		#self.dice_text = self.font.render("Thrown: %s".format(self.thrown), True, (255, 9, 12))
+		#self.dice_text = self.font.render("6", True, (0, 128, 0))
+
 
 		#colors
 		self.red = (191,36,36)
@@ -225,6 +228,11 @@ class Game:
 		self.screen = pygame.display.set_mode(self.size,RESIZABLE)
 		self.screen.fill((255, 255, 255))
 
+		if self.thrown > 0:
+			#self.dice_text = self.thrown
+			self.dice_text = self.font.render("{0}".format(self.thrown), True, (255, 9, 12))
+			self.screen.blit(self.dice_text, (20, 20))
+
 		#set all images
 		self.screen.blit(self.img,(510,420))
 		self.screen.blit(self.img2,(500,100))
@@ -263,7 +271,7 @@ class Game:
 		self.screen.blit(self.img27,(10,720))
 		#self.screen.blit(self.img28,(77,130))
 
-		#draw dice
+		#draw dice button
 		pygame.draw.rect(self.screen, (0, 0, 0), (10, 10, 50, 50), 1)
 
 		#draw all player
@@ -272,8 +280,6 @@ class Game:
 
 		#draw game board
 		for rectangle in self.blocks:
-			"""if rectangle.x == 249 and rectangle.y == 51:
-				#this.w = 9"""
 			pygame.draw.rect(self.screen, self.black, rectangle, 1)
 
 		for rectangle in self.battleblocks:
@@ -297,6 +303,8 @@ class Game:
 					if mousex > 10 and mousex < 60 and mousey > 10 and mousey < 60:
 						if self.thrown == 0:
 							self.thrown = random.randint(1, 6)
+							#self.dice_text = self.font.render(self.thrown, True, (0, 128, 0))
+							#self.screen.blit(self.dice_text, (20, 20))
 							if self.players[self.turn].state == "start":
 								self.players[self.turn].rect.x = 278
 								self.players[self.turn].rect.y = 54
@@ -314,7 +322,6 @@ class Game:
 			#pygame.display.flip()
 
 
-
 player1 = Player("A",(155,255,140),200,28)
 player2 = Player("B",(155,255,140),226,28)
 player3 = Player("C",(91,183,211),252,28)
@@ -326,7 +333,7 @@ players = [player1,player2,player3]
 
 game = Game(players)
 for x in game.blocks:
-   print(x)
+	print(x)
 
 game.Gameloop()
 
