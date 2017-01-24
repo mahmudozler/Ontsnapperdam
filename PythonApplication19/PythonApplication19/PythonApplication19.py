@@ -155,8 +155,35 @@ class Game:
 		self.img27 = pygame.image.load('img/boat.png')
 		self.img27= pygame.transform.smoothscale(self.img27,(110,110 ))
 
-		#self.img28 = pygame.image.load('img/l.png')
-		#self.img28= pygame.transform.smoothscale(self.img28,(20,20 ))
+		self.img28 = pygame.image.load('img/fist.png')
+		self.img28= pygame.transform.smoothscale(self.img28,(20,20 ))
+
+		#text map
+		self.font = pygame.font.SysFont(None,16)
+		self.text=self.font.render("Rotterdam Centraal",True,(0,0,0))
+		
+		self.font = pygame.font.SysFont(None,30)
+		self.text1=self.font.render("L",True,(0,0,0))
+
+		self.font = pygame.font.SysFont(None,15)
+		self.text2=self.font.render("Coffeeshop Amigo",True,(0,0,0))
+
+		self.font = pygame.font.SysFont(None,15)
+		self.text3=self.font.render("Huize Jansen",True,(0,0,0))
+		
+		self.font = pygame.font.SysFont(None,15)
+		self.text4=self.font.render("Kabouter Buttplug",True,(0,0,0))
+
+		self.font = pygame.font.SysFont(None,15)
+		self.text5=self.font.render("Museumpark",True,(0,0,0))
+
+		self.font = pygame.font.SysFont(None,15)
+		self.text6=self.font.render("Euromast",True,(0,0,0))
+
+		#!?
+		self.font = pygame.font.SysFont(None,33)
+		self.text7=self.font.render("!?",True,(244,152,66))
+
 
 		#block width,height,margin
 		self.w = 25
@@ -164,7 +191,7 @@ class Game:
 		self.m = 1
 
 		#font
-		myfont = self.screen.font.SysFont("Comic Sans MS", 30)
+		#myfont = self.screen.font.SysFont("Comic Sans MS", 30)
 
 		#colors
 		self.red = (191,36,36)
@@ -261,7 +288,63 @@ class Game:
 		self.screen.blit(self.img25,(145,755))
 		self.screen.blit(self.img26,(118,778))
 		self.screen.blit(self.img27,(10,720))
-		#self.screen.blit(self.img28,(77,130))
+		self.screen.blit(self.img28,(329,808))
+		#text map
+		self.screen.blit(self.text,(250,57))
+		self.screen.blit(self.text2,(67,350))
+		self.screen.blit(self.text3,(240,365))
+		self.screen.blit(self.text4,(240,440))
+		self.screen.blit(self.text5,(308,630))
+		self.screen.blit(self.text6,(300,760))
+		#L
+		self.screen.blit(self.text1,(542,107))
+		self.screen.blit(self.text1,(542,550))
+		self.screen.blit(self.text1,(490,212))
+		self.screen.blit(self.text1,(463,367))
+		self.screen.blit(self.text1,(437,497))
+		self.screen.blit(self.text1,(437,653))
+		self.screen.blit(self.text1,(463,810))
+		self.screen.blit(self.text1,(100,185))
+		self.screen.blit(self.text1,(177,315))
+		self.screen.blit(self.text1,(47,367))
+		self.screen.blit(self.text1,(333,289))
+		self.screen.blit(self.text1,(255,419))
+		self.screen.blit(self.text1,(255,498))
+		self.screen.blit(self.text1,(333,679))
+		self.screen.blit(self.text1,(255,757))
+		self.screen.blit(self.text1,(125,757))
+		self.screen.blit(self.text1,(150,600))
+		self.screen.blit(self.text1,(48,705))
+		#!?
+		self.screen.blit(self.text7,(121,54))
+		self.screen.blit(self.text7,(408,54))
+		self.screen.blit(self.text7,(305,105))
+		self.screen.blit(self.text7,(356,184))
+		self.screen.blit(self.text7,(200,184))
+		self.screen.blit(self.text7,(200,313))
+		self.screen.blit(self.text7,(200,470))
+		self.screen.blit(self.text7,(200,600))
+		self.screen.blit(self.text7,(44,184))
+		self.screen.blit(self.text7,(95,235))
+		self.screen.blit(self.text7,(122,391))
+		self.screen.blit(self.text7,(122,704))
+		self.screen.blit(self.text7,(122,808))
+		self.screen.blit(self.text7,(44,522))
+		self.screen.blit(self.text7,(382,262))
+		self.screen.blit(self.text7,(382,495))
+		self.screen.blit(self.text7,(382,600))
+		self.screen.blit(self.text7,(382,677))
+		self.screen.blit(self.text7,(485,262))
+		self.screen.blit(self.text7,(538,313))
+		self.screen.blit(self.text7,(538,392))
+		self.screen.blit(self.text7,(538,678))
+		self.screen.blit(self.text7,(252,678))
+		self.screen.blit(self.text7,(434,313))
+		self.screen.blit(self.text7,(330,340))
+		self.screen.blit(self.text7,(460,443))
+		self.screen.blit(self.text7,(305,808))
+		self.screen.blit(self.text7,(512,808))
+
 
 		#draw dice
 		pygame.draw.rect(self.screen, (0, 0, 0), (10, 10, 50, 50), 1)
