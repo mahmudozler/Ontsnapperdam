@@ -60,7 +60,89 @@ class Game:
 		self.running = False
 
 		#game pic location
-		self.img = pygame.image.load('img/Fiches.jpg')
+		self.img = pygame.image.load('img/soldier.png')
+		self.img = pygame.transform.smoothscale(self.img,(30,20 ))
+
+		self.img2 = pygame.image.load('img/hilton.png')
+		self.img2 = pygame.transform.smoothscale(self.img2,(35,32 ))
+
+		self.img3 = pygame.image.load('img/dedoelen.png')
+		self.img3 = pygame.transform.smoothscale(self.img3,(60,60 ))
+
+		self.img4 = pygame.image.load('img/police.png')
+		self.img4 = pygame.transform.smoothscale(self.img4,(27,27 ))
+
+		self.img5 = pygame.image.load('img/fusrodah.png')
+		self.img5 = pygame.transform.smoothscale(self.img5,(23,23 ))
+
+		self.img6 = pygame.image.load('img/bike.png')
+		self.img6 = pygame.transform.smoothscale(self.img6,(24,24 ))
+
+		self.img7 = pygame.image.load('img/luxor.png')
+		self.img7 = pygame.transform.smoothscale(self.img7,(45,40 ))
+
+		self.img8 = pygame.image.load('img/kfc.png')
+		self.img8 = pygame.transform.smoothscale(self.img8,(30,30 ))
+
+		self.img9 = pygame.image.load('img/bijenkorf.png')
+		self.img9 = pygame.transform.smoothscale(self.img9,(80,80 ))
+
+		self.img10 = pygame.image.load('img/abn.png')
+		self.img10 = pygame.transform.smoothscale(self.img10,(70,85 ))
+
+		self.img11 = pygame.image.load('img/house.png')
+		self.img11 = pygame.transform.smoothscale(self.img11,(40,40 ))
+
+		self.img12 = pygame.image.load('img/weed.png')
+		self.img12 = pygame.transform.smoothscale(self.img12,(30,30 ))
+
+		self.img13 = pygame.image.load('img/camuflage.png')
+		self.img13 = pygame.transform.smoothscale(self.img13,(20,20 ))
+
+		self.img14 = pygame.image.load('img/kabouter.png')
+		self.img14 = pygame.transform.smoothscale(self.img14,(55,55 ))
+
+		self.img15 = pygame.image.load('img/ufo.png')
+		self.img15 = pygame.transform.smoothscale(self.img15,(25,25 ))
+			 
+		self.img16 = pygame.image.load('img/wok.png')
+		self.img16 = pygame.transform.smoothscale(self.img16,(40,20 ))
+
+		self.img17 = pygame.image.load('img/hro.png')
+		self.img17 = pygame.transform.smoothscale(self.img17,(30,30 ))
+
+		self.img18 = pygame.image.load('img/taxi.png')
+		self.img18 = pygame.transform.smoothscale(self.img18,(23,23 ))
+
+		self.img19 = pygame.image.load('img/erasmus.png')
+		self.img19 = pygame.transform.smoothscale(self.img19,(80,50 ))
+
+		self.img20 = pygame.image.load('img/tree.png')
+		self.img20 = pygame.transform.smoothscale(self.img20,(30,30 ))
+
+		self.img21 = pygame.image.load('img/inntel.png')
+		self.img21 = pygame.transform.smoothscale(self.img21,(30,30 ))
+
+		self.img22 = pygame.image.load('img/kunsthal.png')
+		self.img22 = pygame.transform.smoothscale(self.img22,(30,50 ))
+
+		self.img23 = pygame.image.load('img/euromast.png')
+		self.img23 = pygame.transform.smoothscale(self.img23,(80,65 ))
+
+		self.img24 = pygame.image.load('img/time.png')
+		self.img24= pygame.transform.smoothscale(self.img24,(20,20 ))
+
+		self.img25 = pygame.image.load('img/oriental.png')
+		self.img25= pygame.transform.smoothscale(self.img25,(55,25 ))
+
+		self.img26 = pygame.image.load('img/pijl.png')
+		self.img26= pygame.transform.smoothscale(self.img26,(30,30 ))
+
+		self.img27 = pygame.image.load('img/boat.png')
+		self.img27= pygame.transform.smoothscale(self.img27,(110,110 ))
+
+		#self.img28 = pygame.image.load('img/l.png')
+		#self.img28= pygame.transform.smoothscale(self.img28,(20,20 ))
 
 		#block width,height,margin
 		self.w = 25
@@ -122,7 +204,43 @@ class Game:
 		self.screen = pygame.display.set_mode(self.size)
 		self.screen.fill((255, 255, 255))
 
-		self.screen.blit(self.img,(0,0))
+		#set all images
+		self.screen.blit(self.img,(510,420))
+		self.screen.blit(self.img2,(500,100))
+		self.screen.blit(self.img3,(77,130))
+		self.screen.blit(self.img4,(378,179))
+		self.screen.blit(self.img4,(144,257))
+		self.screen.blit(self.img4,(534,413))
+		self.screen.blit(self.img5,(42,235))
+		self.screen.blit(self.img6,(250,258))
+		self.screen.blit(self.img7,(435,195))
+		self.screen.blit(self.img8,(170,282))
+		self.screen.blit(self.img9,(353,260))
+		self.screen.blit(self.img10,(473,330))
+		self.screen.blit(self.img11,(235,374))
+		self.screen.blit(self.img12,(65,360))
+		self.screen.blit(self.img13,(70,445))
+		self.screen.blit(self.img14,(240,438))
+		self.screen.blit(self.img4,(274,491))
+		self.screen.blit(self.img15,(379,440))
+		self.screen.blit(self.img16,(415,470))
+		self.screen.blit(self.img17,(505,542))
+		self.screen.blit(self.img18,(276,571))
+		self.screen.blit(self.img8,(130,570))
+		self.screen.blit(self.img19,(70,650))
+		self.screen.blit(self.img20,(296,645))
+		self.screen.blit(self.img20,(324,645))
+		self.screen.blit(self.img20,(352,645))
+		self.screen.blit(self.img21,(458,647))
+		self.screen.blit(self.img4,(92,518))
+		self.screen.blit(self.img22,(458,750))
+		self.screen.blit(self.img4,(430,725))
+		self.screen.blit(self.img23,(250,740))
+		self.screen.blit(self.img24,(200,703))
+		self.screen.blit(self.img25,(145,755))
+		self.screen.blit(self.img26,(118,778))
+		self.screen.blit(self.img27,(10,720))
+		#self.screen.blit(self.img28,(77,130))
 
 		#draw dice
 		pygame.draw.rect(self.screen, (0, 0, 0), (10, 10, 50, 50), 1)
