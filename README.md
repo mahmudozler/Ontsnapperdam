@@ -9,3 +9,5 @@
 **22/01/2017** - Player can only walk on grid now!
 
 **23/01/2017** - Battle zones added 
+
+**24/01/2017** - termination screen added, images in gameboard, start block added 

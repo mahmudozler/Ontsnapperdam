@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import random
+pygame.font.init()
 
 pygame.init()
 
@@ -15,6 +16,8 @@ class Player:
 		self.r = 10
 		self.rect = pygame.Rect(self.x, self.y, 20, 20)
 		self.steps = 0
+		self.startblock = pygame.Rect(249, 51, 103, 25)
+		self.state = "start"
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
@@ -24,14 +27,25 @@ class Player:
 			# to check the new position is within the game blocks
 			newpos = self.rect.copy()
 
-			if event.key == pygame.K_LEFT:
-				newpos.x -= 26
-			elif event.key == pygame.K_RIGHT:
-				newpos.x += 26
-			elif event.key == pygame.K_UP:
-				newpos.y -= 26
-			elif event.key == pygame.K_DOWN:
-				newpos.y += 26
+			# If player on start block these sizes these steps else normal size steps
+			if newpos.colliderect(self.startblock):
+				#print("STARTBLOCK")
+				self.state = "-"
+				if event.key == pygame.K_LEFT:
+					newpos.x -= 52
+				elif event.key == pygame.K_RIGHT:
+					newpos.x += 78
+				elif event.key == pygame.K_DOWN:
+					newpos.y += 26
+			else:
+				if event.key == pygame.K_LEFT:
+					newpos.x -= 26
+				elif event.key == pygame.K_RIGHT:
+					newpos.x += 26
+				elif event.key == pygame.K_UP:
+					newpos.y -= 26
+				elif event.key == pygame.K_DOWN:
+					newpos.y += 26
 
 			# bool check is newpos is inside game rectangles
 			for rectangle in blocks:
@@ -149,6 +163,9 @@ class Game:
 		self.h = 25
 		self.m = 1
 
+		#font
+		myfont = self.screen.font.SysFont("Comic Sans MS", 30)
+
 		#colors
 		self.red = (191,36,36)
 		self.black = (23,20,20)
@@ -177,7 +194,11 @@ class Game:
 						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50),
 									self.w, self.h))
 
-		self.blocks[8].w = 103
+		# special blocks
+		self.startblock = self.blocks[8]
+		self.startblock.w = 103
+
+
 
 	def Update(self, event):
 		player = self.players[self.turn]
@@ -201,7 +222,7 @@ class Game:
 	def Draw(self):
 
 		#draw canvas
-		self.screen = pygame.display.set_mode(self.size)
+		self.screen = pygame.display.set_mode(self.size,RESIZABLE)
 		self.screen.fill((255, 255, 255))
 
 		#set all images
@@ -276,6 +297,11 @@ class Game:
 					if mousex > 10 and mousex < 60 and mousey > 10 and mousey < 60:
 						if self.thrown == 0:
 							self.thrown = random.randint(1, 6)
+							if self.players[self.turn].state == "start":
+								self.players[self.turn].rect.x = 278
+								self.players[self.turn].rect.y = 54
+
+							self.Draw()
 						print(self.thrown)
 
 				# execute if dice is thrown
@@ -284,6 +310,7 @@ class Game:
 						self.Update(event)
 
 						self.Draw()
+			# ...
 			#pygame.display.flip()
 
 
@@ -299,7 +326,7 @@ players = [player1,player2,player3]
 
 game = Game(players)
 for x in game.blocks:
-	print(x)
+   print(x)
 
 game.Gameloop()
 
