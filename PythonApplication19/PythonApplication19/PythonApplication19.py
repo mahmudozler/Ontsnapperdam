@@ -191,14 +191,11 @@ class Game:
 		self.m = 1
 
 		#font
-<<<<<<< HEAD
 		#myfont = self.screen.font.SysFont("Comic Sans MS", 30)
-=======
 		self.font = pygame.font.SysFont("comicsansms", 57)
 		#self.dice_text = self.font.render("Thrown: %s".format(self.thrown), True, (255, 9, 12))
 		#self.dice_text = self.font.render("6", True, (0, 128, 0))
 
->>>>>>> 46b13b687f7bbfea9f6855fe4f708b212330ed25
 
 		#colors
 		self.red = (191,36,36)
