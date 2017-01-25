@@ -12,4 +12,4 @@
 
 **24/01/2017** - termination screen added, images in gameboard, start block added, thrown dice showed on screen
 
-**25/01/2017** - added start, if 4 player can start 
+**25/01/2017** - added start, if 4 thrown player can start, menu updated, highscore screen updated
