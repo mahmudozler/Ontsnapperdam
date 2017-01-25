@@ -11,11 +11,13 @@ height = 850
 img = pygame.image.load('play.png')
 img3 = pygame.image.load('exit.png')
 bg = pygame.image.load('speelbord.png')
-ologo = pygame.image.load('ontsnapperdam logo.png')
+ologo = pygame.image.load('ontsnapperdamlogo.png')
+setting = pygame.image.load('settings.png')
 img2 = pygame.transform.smoothscale(img,(200, 70))
 img4 = pygame.transform.smoothscale(img3,(200,70))
 bg1 = pygame.transform.smoothscale(bg,(width,height))
-ologo1 = pygame.transform.smoothscale(ologo,(400,80))
+ologo1 = pygame.transform.smoothscale(ologo,(800,230))
+settings1 = pygame.transform.smoothscale(setting,(100,35))
 screen = pygame.display.set_mode((width,height))
 
 
@@ -41,6 +43,7 @@ label2 = fontrenderer.render("Settings",1,black)
 class start:
     def __init__(self):
         self.running = True
+        self.waarheid = False
 
 
 
@@ -49,25 +52,40 @@ class start:
 
         while self.running:
             screen.blit(bg1,(0,0))
-            screen.blit(img2,(width*0.35,height*0.35))
-            screen.blit(img4,(width*0.35,height*0.55))
-            screen.blit(ologo1,(15,15))
+            screen.blit(img2,(width*0.35,height*0.45))
+            screen.blit(img4,(width*0.35,height*0.65))
+            screen.blit(ologo1,(15,70))
+            screen.blit(settings1,(width-100,15))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
                     Game(players)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex, mousey = pygame.mouse.get_pos()
-                    if  width*0.35 <= mousex and  width*0.60 >= mousex and height*0.35 <=mousey and height*0.466 >= mousey:
+                    if  width*0.35 <= mousex and  width*0.60 >= mousex and height*0.45 <=mousey and height*0.566 >= mousey:
                         self.running = False
-                    elif width*0.35 <= mousex and width*0.60 >= mousex and height*0.55 <= mousey and height*0.766 >= mousey:
+                    elif width*0.35 <= mousex and width*0.60 >= mousex and height*0.65 <= mousey and height*0.866 >= mousey:
                         pygame.quit()
                         quit()
+                    elif width-100 <= mousex and width >= mousex and 15 <= mousey and 50 >= mousey:
+                        print("hij doet het wel")
 
             pygame.display.flip()
 
 
 menu = start()
+
+class Settings:
+
+    def settingsmenu(self):
+        while start.__init__(self.waarheid):
+            pygame.display.set_caption('Ontsnapperdam')
+            screen.fill(white)
+            screen.blit(label2,(15,15))
+
+wow = Settings()
+
+
 
 done = False
 
@@ -245,6 +263,7 @@ game = Game(players)
 
 class Program:
     menu.intro()
+
     game.Gameloop()
 
 
