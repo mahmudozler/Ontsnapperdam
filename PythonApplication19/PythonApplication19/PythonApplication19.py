@@ -17,7 +17,7 @@ class Player:
 		self.rect = pygame.Rect(self.x, self.y, 20, 20)
 		self.steps = 0
 		self.startblock = pygame.Rect(249, 51, 103, 25)
-		self.state = "start"
+		self.state = "lock"
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
@@ -191,10 +191,7 @@ class Game:
 		self.m = 1
 
 		#font
-		#myfont = self.screen.font.SysFont("Comic Sans MS", 30)
 		self.font = pygame.font.SysFont("comicsansms", 57)
-		#self.dice_text = self.font.render("Thrown: %s".format(self.thrown), True, (255, 9, 12))
-		#self.dice_text = self.font.render("6", True, (0, 128, 0))
 
 
 		#colors
@@ -233,17 +230,57 @@ class Game:
 
 	def Update(self, event):
 		player = self.players[self.turn]
-		if event.type == pygame.KEYDOWN:
-			player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks)
+		#print(event.type)
 
-			# if all steps made
-			if player.steps == self.thrown:
-				self.thrown = 0
-				if self.turn == (len(self.players) - 1):
-					self.turn = 0
-				else:
-					self.turn += 1
-				player.steps = 0
+		# if player throws 4 or more at start, let player in gameboard
+		if self.thrown >= 4 and player.state == "lock":
+			player.state = "start"
+			self.players[self.turn].rect.x = 278
+			self.players[self.turn].rect.y = 54
+			pygame.display.update()
+			#if event.type == pygame.MOUSEBUTTONDOWN:
+
+			"""
+			player.draw(self.screen)
+			self.Draw()
+			#pygame.display.flip()
+			#"""
+
+
+			if event.type == pygame.KEYDOWN:
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks)
+
+				# if all steps made reset dice throw and set turn to next player
+				if player.steps == self.thrown:
+					self.thrown = 0
+					if self.turn == (len(self.players) - 1):
+						self.turn = 0
+					else:
+						self.turn += 1
+					player.steps = 0
+
+		# if player throws less than 4 at start
+		elif self.thrown < 4 and player.state == "lock":
+			self.thrown = 0
+			if self.turn < (len(self.players) - 1):
+				self.turn += 1
+			else:
+				self.turn = 0
+
+		else:
+			if event.type == pygame.KEYDOWN:
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks)
+
+				# if all steps made
+				if player.steps == self.thrown:
+					self.thrown = 0
+					if self.turn == (len(self.players) - 1):
+						self.turn = 0
+					else:
+						self.turn += 1
+					player.steps = 0
+
+
 
 	def Filter(self, x, y,list):
 		if x in list[y]:
@@ -298,6 +335,7 @@ class Game:
 		self.screen.blit(self.img26,(118,778))
 		self.screen.blit(self.img27,(10,720))
 		self.screen.blit(self.img28,(329,808))
+
 		#text map
 		self.screen.blit(self.text,(250,57))
 		self.screen.blit(self.text2,(67,350))
@@ -305,6 +343,7 @@ class Game:
 		self.screen.blit(self.text4,(240,440))
 		self.screen.blit(self.text5,(308,630))
 		self.screen.blit(self.text6,(300,760))
+
 		#L
 		self.screen.blit(self.text1,(542,107))
 		self.screen.blit(self.text1,(542,550))
@@ -385,16 +424,23 @@ class Game:
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					mousex, mousey = pygame.mouse.get_pos()
 					if mousex > 10 and mousex < 60 and mousey > 10 and mousey < 60:
+						print("its turn: " + str(self.turn))
 						if self.thrown == 0:
 							self.thrown = random.randint(1, 6)
-							#self.dice_text = self.font.render(self.thrown, True, (0, 128, 0))
-							#self.screen.blit(self.dice_text, (20, 20))
-							if self.players[self.turn].state == "start":
-								self.players[self.turn].rect.x = 278
-								self.players[self.turn].rect.y = 54
 
-							self.Draw()
-						print(self.thrown)
+							if self.thrown < 4:
+								self.Update(event)
+							"""if self.thrown < 4:
+								if self.turn < len(self.players):
+									self.turn += 1
+								else:
+									self.turn = 0"""
+
+							"""if self.players[self.turn].state == "start":
+								self.players[self.turn].rect.x = 278
+								self.players[self.turn].rect.y = 54"""
+							#self.Draw()
+						print("has thrown:" + str(self.thrown))
 
 				# execute if dice is thrown
 				if event.type == pygame.KEYDOWN:
@@ -406,9 +452,9 @@ class Game:
 			#pygame.display.flip()
 
 
-player1 = Player("A",(155,255,140),200,28)
-player2 = Player("B",(155,255,140),226,28)
-player3 = Player("C",(91,183,211),252,28)
+player1 = Player("A",(255,0,0),200,28)
+player2 = Player("B",(0,255,0),226,28)
+player3 = Player("C",(0,0,255),252,28)
 player4 = Player("D",(116,59,124),278,28)
 player5 = Player("E",(237,65,56),304,28)
 player6 = Player("F",(0,0,0),330,28)
