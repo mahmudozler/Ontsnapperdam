@@ -267,12 +267,15 @@ class Game:
 
 		# if dice is thrown
 		if self.thrown > 0:
+
 			#text handles
 			self.screen.blit(self.dice_font.render("{0}".format(self.thrown), True, self.black), (625, 70))
+			self.screen.blit(self.info_font.render("You have thrown:", True, self.black), (600, 30))
 			if self.thrown < 4 and self.players[self.turn].state == "lock":
-				self.screen.blit(self.info_font.render("player {0} ".format(self.turn), True,self.players[self.turn].kleur), (600, 130))
-				self.screen.blit(self.info_font.render("you need to throw 4 + to move!".format(self.turn), True,self.black), (600, 145))
-				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 175))
+				self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True,self.players[self.turn].kleur), (600, 130))
+				self.screen.blit(self.info_font.render("you need to throw 4 or more".format(self.turn), True,self.black), (600, 145))
+				self.screen.blit(self.info_font.render("to enter Rotterdam centraal!".format(self.turn), True, self.black),(600, 160))
+				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 190))
 			else:
 				self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
 				self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
@@ -447,14 +450,14 @@ class Game:
 			#pygame.display.flip()
 
 
-player1 = Player("A",(255,0,0),200,28)
-player2 = Player("B",(0,255,0),226,28)
-player3 = Player("C",(0,0,255),252,28)
-player4 = Player("D",(116,59,124),278,28)
-player5 = Player("E",(237,65,56),304,28)
-player6 = Player("F",(0,0,0),330,28)
+p1 = Player("A",(255,0,0),200,28)
+p2 = Player("B",(0,255,0),226,28)
+p3 = Player("C",(0,0,255),252,28)
+p4 = Player("D",(116,59,124),278,28)
+p5 = Player("E",(237,65,56),304,28)
+p6 = Player("F",(0,0,0),330,28)
 
-players = [player1,player2,player3]
+players = [p1,p2,p3,p4]
 
 game = Game(players)
 for x in game.blocks:
