@@ -17,7 +17,7 @@ class Player:
 		self.rect = pygame.Rect(self.x, self.y, 20, 20)
 		self.steps = 0
 		self.startblock = pygame.Rect(249, 51, 103, 25)
-		self.state = "start"
+		self.state = "lock"
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
@@ -158,44 +158,30 @@ class Game:
 		self.img28 = pygame.image.load('img/fist.png')
 		self.img28= pygame.transform.smoothscale(self.img28,(20,20 ))
 
-		#text map
-		self.font = pygame.font.SysFont(None,16)
-		self.text=self.font.render("Rotterdam Centraal",True,(0,0,0))
-		
-		self.font = pygame.font.SysFont(None,30)
-		self.text1=self.font.render("L",True,(0,0,0))
+		# font list
+		self.mapfont = pygame.font.SysFont(None,15)
+		self.landmark_font = pygame.font.SysFont(None, 30)
+		self.suprise_font = pygame.font.SysFont(None, 32)
+		self.info_font = pygame.font.SysFont(None, 20)
+		self.dice_font = pygame.font.SysFont(None, 50)
 
-		self.font = pygame.font.SysFont(None,15)
-		self.text2=self.font.render("Coffeeshop Amigo",True,(0,0,0))
+		#landmarks on map
+		self.text = self.mapfont.render("Rotterdam centraal",True,(0,0,0))
+		self.text1 = self.landmark_font.render("L",True,(0,0,0))
+		self.text2 = self.mapfont.render("Coffeeshop Amigo",True,(0,0,0))
+		self.text3 = self.mapfont.render("Huize Jansen",True,(0,0,0))
+		self.text4 = self.mapfont.render("Kabouter Buttplug",True,(0,0,0))
+		self.text5 = self.mapfont.render("Museumpark",True,(0,0,0))
+		self.text6 = self.mapfont.render("Euromast",True,(0,0,0))
+		self.text1 = self.landmark_font.render("L", True, (0, 0, 0))
 
-		self.font = pygame.font.SysFont(None,15)
-		self.text3=self.font.render("Huize Jansen",True,(0,0,0))
-		
-		self.font = pygame.font.SysFont(None,15)
-		self.text4=self.font.render("Kabouter Buttplug",True,(0,0,0))
-
-		self.font = pygame.font.SysFont(None,15)
-		self.text5=self.font.render("Museumpark",True,(0,0,0))
-
-		self.font = pygame.font.SysFont(None,15)
-		self.text6=self.font.render("Euromast",True,(0,0,0))
-
-		#!?
-		self.font = pygame.font.SysFont(None,33)
-		self.text7=self.font.render("!?",True,(244,152,66))
-
+		#!?(surprise cards)
+		self.text7 = self.suprise_font.render("!?",True,(244,152,66))
 
 		#block width,height,margin
 		self.w = 25
 		self.h = 25
 		self.m = 1
-
-		#font
-		#myfont = self.screen.font.SysFont("Comic Sans MS", 30)
-		self.font = pygame.font.SysFont("comicsansms", 57)
-		#self.dice_text = self.font.render("Thrown: %s".format(self.thrown), True, (255, 9, 12))
-		#self.dice_text = self.font.render("6", True, (0, 128, 0))
-
 
 		#colors
 		self.red = (191,36,36)
@@ -233,17 +219,46 @@ class Game:
 
 	def Update(self, event):
 		player = self.players[self.turn]
-		if event.type == pygame.KEYDOWN:
-			player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks)
+		#print(event.type)
 
-			# if all steps made
-			if player.steps == self.thrown:
-				self.thrown = 0
-				if self.turn == (len(self.players) - 1):
-					self.turn = 0
-				else:
-					self.turn += 1
-				player.steps = 0
+		self.Draw()
+		# if player throws 4 or more at start, let player in gameboard
+		if self.thrown >= 4 and player.state == "lock":
+			player.state = "start"
+
+			if event.type == pygame.KEYDOWN:
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks)
+
+				# if all steps made reset dice throw and set turn to next player
+				if player.steps == self.thrown:
+					self.thrown = 0
+					if self.turn == (len(self.players) - 1):
+						self.turn = 0
+					else:
+						self.turn += 1
+					player.steps = 0
+
+		# if player throws less than 4 at start
+
+		elif self.thrown < 4 and player.state == "lock":
+			self.thrown = 0
+			if self.turn < (len(self.players) - 1):
+				self.turn += 1
+			else:
+				self.turn = 0
+
+		else:
+			if event.type == pygame.KEYDOWN:
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks)
+
+				# if all steps made
+				if player.steps == self.thrown:
+					self.thrown = 0
+					if self.turn == (len(self.players) - 1):
+						self.turn = 0
+					else:
+						self.turn += 1
+					player.steps = 0
 
 	def Filter(self, x, y,list):
 		if x in list[y]:
@@ -256,118 +271,129 @@ class Game:
 		self.screen = pygame.display.set_mode(self.size,RESIZABLE)
 		self.screen.fill((255, 255, 255))
 
+		#text handles when dice is thrown
+		if self.thrown > 0:
+			print("soemthing ha sbeen thrown")
+
 		if self.thrown > 0:
 			#self.dice_text = self.thrown
-			self.dice_text = self.font.render("{0}".format(self.thrown), True, (255, 9, 12))
-			self.screen.blit(self.dice_text, (20, 20))
-
-		#set all images
-		self.screen.blit(self.img,(510,420))
-		self.screen.blit(self.img2,(500,100))
-		self.screen.blit(self.img3,(77,130))
-		self.screen.blit(self.img4,(378,179))
-		self.screen.blit(self.img4,(144,257))
-		self.screen.blit(self.img4,(534,413))
-		self.screen.blit(self.img5,(42,235))
-		self.screen.blit(self.img6,(250,258))
-		self.screen.blit(self.img7,(435,195))
-		self.screen.blit(self.img8,(170,282))
-		self.screen.blit(self.img9,(353,260))
-		self.screen.blit(self.img10,(473,330))
-		self.screen.blit(self.img11,(235,374))
-		self.screen.blit(self.img12,(65,360))
-		self.screen.blit(self.img13,(70,445))
-		self.screen.blit(self.img14,(240,438))
-		self.screen.blit(self.img4,(274,491))
-		self.screen.blit(self.img15,(379,440))
-		self.screen.blit(self.img16,(415,470))
-		self.screen.blit(self.img17,(505,542))
-		self.screen.blit(self.img18,(276,571))
-		self.screen.blit(self.img8,(130,570))
-		self.screen.blit(self.img19,(70,650))
-		self.screen.blit(self.img20,(296,645))
-		self.screen.blit(self.img20,(324,645))
-		self.screen.blit(self.img20,(352,645))
-		self.screen.blit(self.img21,(458,647))
-		self.screen.blit(self.img4,(92,518))
-		self.screen.blit(self.img22,(458,750))
-		self.screen.blit(self.img4,(430,725))
-		self.screen.blit(self.img23,(250,740))
-		self.screen.blit(self.img24,(200,703))
-		self.screen.blit(self.img25,(145,755))
-		self.screen.blit(self.img26,(118,778))
-		self.screen.blit(self.img27,(10,720))
-		self.screen.blit(self.img28,(329,808))
-		#text map
-		self.screen.blit(self.text,(250,57))
-		self.screen.blit(self.text2,(67,350))
-		self.screen.blit(self.text3,(240,365))
-		self.screen.blit(self.text4,(240,440))
-		self.screen.blit(self.text5,(308,630))
-		self.screen.blit(self.text6,(300,760))
-		#L
-		self.screen.blit(self.text1,(542,107))
-		self.screen.blit(self.text1,(542,550))
-		self.screen.blit(self.text1,(490,212))
-		self.screen.blit(self.text1,(463,367))
-		self.screen.blit(self.text1,(437,497))
-		self.screen.blit(self.text1,(437,653))
-		self.screen.blit(self.text1,(463,810))
-		self.screen.blit(self.text1,(100,185))
-		self.screen.blit(self.text1,(177,315))
-		self.screen.blit(self.text1,(47,367))
-		self.screen.blit(self.text1,(333,289))
-		self.screen.blit(self.text1,(255,419))
-		self.screen.blit(self.text1,(255,498))
-		self.screen.blit(self.text1,(333,679))
-		self.screen.blit(self.text1,(255,757))
-		self.screen.blit(self.text1,(125,757))
-		self.screen.blit(self.text1,(150,600))
-		self.screen.blit(self.text1,(48,705))
-		#!?
-		self.screen.blit(self.text7,(121,54))
-		self.screen.blit(self.text7,(408,54))
-		self.screen.blit(self.text7,(305,105))
-		self.screen.blit(self.text7,(356,184))
-		self.screen.blit(self.text7,(200,184))
-		self.screen.blit(self.text7,(200,313))
-		self.screen.blit(self.text7,(200,470))
-		self.screen.blit(self.text7,(200,600))
-		self.screen.blit(self.text7,(44,184))
-		self.screen.blit(self.text7,(95,235))
-		self.screen.blit(self.text7,(122,391))
-		self.screen.blit(self.text7,(122,704))
-		self.screen.blit(self.text7,(122,808))
-		self.screen.blit(self.text7,(44,522))
-		self.screen.blit(self.text7,(382,262))
-		self.screen.blit(self.text7,(382,495))
-		self.screen.blit(self.text7,(382,600))
-		self.screen.blit(self.text7,(382,677))
-		self.screen.blit(self.text7,(485,262))
-		self.screen.blit(self.text7,(538,313))
-		self.screen.blit(self.text7,(538,392))
-		self.screen.blit(self.text7,(538,678))
-		self.screen.blit(self.text7,(252,678))
-		self.screen.blit(self.text7,(434,313))
-		self.screen.blit(self.text7,(330,340))
-		self.screen.blit(self.text7,(460,443))
-		self.screen.blit(self.text7,(305,808))
-		self.screen.blit(self.text7,(512,808))
+			self.screen.blit(self.dice_font.render("{0}".format(self.thrown), True, self.black), (625, 70))
+		else:
+			self.player_turn_text = self.info_font.render("Player {0} throw the dice!".format((self.turn + 1)), True, (10, 10, 10))
+			self.screen.blit(self.player_turn_text, (600, 25))
+			if self.players[self.turn].state == "lock":
+				self.screen.blit(self.info_font.render("Throw 4 or more to get",1,self.black),(600,130))
+				self.screen.blit(self.info_font.render("on Rotterdam Centraal!", 1, self.black),(600, 145))
 
 
 		#draw dice button
-		pygame.draw.rect(self.screen, (0, 0, 0), (10, 10, 50, 50), 1)
+		pygame.draw.rect(self.screen, (0, 0, 0), (600, 50, 70, 70), 1)
 
-		#draw all player
-		for player in self.players:
-			player.draw(self.screen)
+		# paste all images
+		self.screen.blit(self.img, (510, 420))
+		self.screen.blit(self.img2, (500, 100))
+		self.screen.blit(self.img3, (77, 130))
+		self.screen.blit(self.img4, (378, 179))
+		self.screen.blit(self.img4, (144, 257))
+		self.screen.blit(self.img4, (534, 413))
+		self.screen.blit(self.img5, (42, 235))
+		self.screen.blit(self.img6, (250, 258))
+		self.screen.blit(self.img7, (435, 195))
+		self.screen.blit(self.img8, (170, 282))
+		self.screen.blit(self.img9, (353, 260))
+		self.screen.blit(self.img10, (473, 330))
+		self.screen.blit(self.img11, (235, 374))
+		self.screen.blit(self.img12, (65, 360))
+		self.screen.blit(self.img13, (70, 445))
+		self.screen.blit(self.img14, (240, 438))
+		self.screen.blit(self.img4, (274, 491))
+		self.screen.blit(self.img15, (379, 440))
+		self.screen.blit(self.img16, (415, 470))
+		self.screen.blit(self.img17, (505, 542))
+		self.screen.blit(self.img18, (276, 571))
+		self.screen.blit(self.img8, (130, 570))
+		self.screen.blit(self.img19, (70, 650))
+		self.screen.blit(self.img20, (296, 645))
+		self.screen.blit(self.img20, (324, 645))
+		self.screen.blit(self.img20, (352, 645))
+		self.screen.blit(self.img21, (458, 647))
+		self.screen.blit(self.img4, (92, 518))
+		self.screen.blit(self.img22, (458, 750))
+		self.screen.blit(self.img4, (430, 725))
+		self.screen.blit(self.img23, (250, 740))
+		self.screen.blit(self.img24, (200, 703))
+		self.screen.blit(self.img25, (145, 755))
+		self.screen.blit(self.img26, (118, 778))
+		self.screen.blit(self.img27, (10, 720))
+		self.screen.blit(self.img28, (329, 808))
 
-		#draw game board
+		# text map
+		self.screen.blit(self.text, (254, 57))
+		self.screen.blit(self.text2, (67, 350))
+		self.screen.blit(self.text3, (240, 365))
+		self.screen.blit(self.text4, (240, 440))
+		self.screen.blit(self.text5, (308, 630))
+		self.screen.blit(self.text6, (300, 760))
+
+		# L
+		self.screen.blit(self.text1, (542, 107))
+		self.screen.blit(self.text1, (542, 550))
+		self.screen.blit(self.text1, (490, 212))
+		self.screen.blit(self.text1, (463, 367))
+		self.screen.blit(self.text1, (437, 497))
+		self.screen.blit(self.text1, (437, 653))
+		self.screen.blit(self.text1, (463, 810))
+		self.screen.blit(self.text1, (100, 185))
+		self.screen.blit(self.text1, (177, 315))
+		self.screen.blit(self.text1, (47, 367))
+		self.screen.blit(self.text1, (333, 289))
+		self.screen.blit(self.text1, (255, 419))
+		self.screen.blit(self.text1, (255, 498))
+		self.screen.blit(self.text1, (333, 679))
+		self.screen.blit(self.text1, (255, 757))
+		self.screen.blit(self.text1, (125, 757))
+		self.screen.blit(self.text1, (150, 600))
+		self.screen.blit(self.text1, (48, 705))
+		# !?
+		self.screen.blit(self.text7, (121, 54))
+		self.screen.blit(self.text7, (408, 54))
+		self.screen.blit(self.text7, (305, 105))
+		self.screen.blit(self.text7, (356, 184))
+		self.screen.blit(self.text7, (200, 184))
+		self.screen.blit(self.text7, (200, 313))
+		self.screen.blit(self.text7, (200, 470))
+		self.screen.blit(self.text7, (200, 600))
+		self.screen.blit(self.text7, (44, 184))
+		self.screen.blit(self.text7, (95, 235))
+		self.screen.blit(self.text7, (122, 391))
+		self.screen.blit(self.text7, (122, 704))
+		self.screen.blit(self.text7, (122, 808))
+		self.screen.blit(self.text7, (44, 522))
+		self.screen.blit(self.text7, (382, 262))
+		self.screen.blit(self.text7, (382, 495))
+		self.screen.blit(self.text7, (382, 600))
+		self.screen.blit(self.text7, (382, 677))
+		self.screen.blit(self.text7, (485, 262))
+		self.screen.blit(self.text7, (538, 313))
+		self.screen.blit(self.text7, (538, 392))
+		self.screen.blit(self.text7, (538, 678))
+		self.screen.blit(self.text7, (252, 678))
+		self.screen.blit(self.text7, (434, 313))
+		self.screen.blit(self.text7, (330, 340))
+		self.screen.blit(self.text7, (460, 443))
+		self.screen.blit(self.text7, (305, 808))
+		self.screen.blit(self.text7, (512, 808))
+
+		# draw game board
 		for rectangle in self.blocks:
 			pygame.draw.rect(self.screen, self.black, rectangle, 1)
 
 		for rectangle in self.battleblocks:
 			pygame.draw.rect(self.screen, self.red, rectangle, 1)
+
+		# draw all player
+		for player in self.players:
+			player.draw(self.screen)
 
 		#update whole screen
 		pygame.display.flip()
@@ -384,17 +410,21 @@ class Game:
 				# If click on dice
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					mousex, mousey = pygame.mouse.get_pos()
-					if mousex > 10 and mousex < 60 and mousey > 10 and mousey < 60:
+					if mousex > 600 and mousex < 670 and mousey > 50 and mousey < 120:
+						print("its turn: " + str(self.turn))
 						if self.thrown == 0:
 							self.thrown = random.randint(1, 6)
-							#self.dice_text = self.font.render(self.thrown, True, (0, 128, 0))
-							#self.screen.blit(self.dice_text, (20, 20))
-							if self.players[self.turn].state == "start":
+
+							#If lower than 4 turn to next player
+							if self.thrown < 4:
+								self.Update(event)
+
+							# higher than 3 set player in rotterdam central to may start
+							if self.players[self.turn].state == "lock" and self.thrown > 3:
 								self.players[self.turn].rect.x = 278
 								self.players[self.turn].rect.y = 54
-
 							self.Draw()
-						print(self.thrown)
+						print("has thrown:" + str(self.thrown))
 
 				# execute if dice is thrown
 				if event.type == pygame.KEYDOWN:
@@ -406,9 +436,9 @@ class Game:
 			#pygame.display.flip()
 
 
-player1 = Player("A",(155,255,140),200,28)
-player2 = Player("B",(155,255,140),226,28)
-player3 = Player("C",(91,183,211),252,28)
+player1 = Player("A",(255,0,0),200,28)
+player2 = Player("B",(0,255,0),226,28)
+player3 = Player("C",(0,0,255),252,28)
 player4 = Player("D",(116,59,124),278,28)
 player5 = Player("E",(237,65,56),304,28)
 player6 = Player("F",(0,0,0),330,28)
