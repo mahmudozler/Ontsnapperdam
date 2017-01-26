@@ -13,3 +13,5 @@
 **24/01/2017** - termination screen added, images in gameboard, start block added, thrown dice showed on screen
 
 **25/01/2017** - added start, if 4 thrown player can start, menu updated, highscore screen updated
+
+**26/01/2017** - Added instruction/info text when players throws dice each turn 

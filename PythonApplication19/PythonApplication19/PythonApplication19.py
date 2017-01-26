@@ -220,6 +220,8 @@ class Game:
 	def Update(self, event):
 		player = self.players[self.turn]
 		#print(event.type)
+		if self.thrown < 4 and player.state == "lock":
+			return
 
 		self.Draw()
 		# if player throws 4 or more at start, let player in gameboard
@@ -237,15 +239,6 @@ class Game:
 					else:
 						self.turn += 1
 					player.steps = 0
-
-		# if player throws less than 4 at start
-
-		elif self.thrown < 4 and player.state == "lock":
-			self.thrown = 0
-			if self.turn < (len(self.players) - 1):
-				self.turn += 1
-			else:
-				self.turn = 0
 
 		else:
 			if event.type == pygame.KEYDOWN:
@@ -272,19 +265,28 @@ class Game:
 		self.screen.fill((255, 255, 255))
 
 		#text handles when dice is thrown
-		if self.thrown > 0:
-			print("soemthing ha sbeen thrown")
+		#if self.thrown > 0:
+			#print("something ha sbeen thrown")
+			#self.screen.blit(self.dice_font.render("{0}".format(self.thrown), True, self.black), (625, 70))
 
+
+		# if dice is thrown
 		if self.thrown > 0:
-			#self.dice_text = self.thrown
 			self.screen.blit(self.dice_font.render("{0}".format(self.thrown), True, self.black), (625, 70))
+			#self.screen.blit(self.info_font.render("Player {0} may walk {0} steps".format(self.turn, self.thrown), True, self.black), (600, 130))
+			if self.thrown < 4 and self.players[self.turn].state == "lock":
+				self.screen.blit(self.info_font.render("player {0} you need to throw 4 + to move!".format(self.turn), True,self.black), (600, 130))
+				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 140))
+			#else:
+				#self.screen.blit(self.info_font.render("player {0} may walk {0} steps".format(self.turn,self.thrown), True, self.black), (600, 130))
+
+		# if dice is not thrown yet
 		else:
 			self.player_turn_text = self.info_font.render("Player {0} throw the dice!".format((self.turn + 1)), True, (10, 10, 10))
 			self.screen.blit(self.player_turn_text, (600, 25))
 			if self.players[self.turn].state == "lock":
 				self.screen.blit(self.info_font.render("Throw 4 or more to get",1,self.black),(600,130))
 				self.screen.blit(self.info_font.render("on Rotterdam Centraal!", 1, self.black),(600, 145))
-
 
 		#draw dice button
 		pygame.draw.rect(self.screen, (0, 0, 0), (600, 50, 70, 70), 1)
@@ -431,6 +433,15 @@ class Game:
 					if self.thrown > 0:
 						self.Update(event)
 
+						self.Draw()
+
+					#if players throw below 4 in first turn, push turn to next player
+					if event.key == K_RETURN and self.thrown > 0 and self.players[self.turn].state == "lock":
+						self.thrown = 0
+						if self.turn < (len(self.players) - 1):
+							self.turn += 1
+						else:
+							self.turn = 0
 						self.Draw()
 			# ...
 			#pygame.display.flip()
