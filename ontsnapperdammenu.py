@@ -83,7 +83,7 @@ class start:
             pygame.display.flip()
 
 
-menu = start()
+menu = menu=start()
 
 class Settings:
 
