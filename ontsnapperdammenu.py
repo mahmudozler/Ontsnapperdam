@@ -8,13 +8,17 @@ import random
 pygame.init()
 width = 800
 height = 850
-img = pygame.image.load('play.png')
-img3 = pygame.image.load('exit.png')
-bg = pygame.image.load('speelbord.png')
-ologo = pygame.image.load('ontsnapperdamlogo.png')
-setting = pygame.image.load('settings.png')
-img2 = pygame.transform.smoothscale(img,(200, 70))
+img = pygame.image.load('afbeeldingen/play.png')
+img3 = pygame.image.load('afbeeldingen/exit.png')
+img5 = pygame.image.load('afbeeldingen/howtoplay.png')
+img7 = pygame.image.load('afbeeldingen/highscores.png')
+bg = pygame.image.load('afbeeldingen/speelbord.png')
+ologo = pygame.image.load('afbeeldingen/ontsnapperdamlogo.png')
+setting = pygame.image.load('afbeeldingen/settings.png')
+img2 = pygame.transform.smoothscale(img,(200,70))
 img4 = pygame.transform.smoothscale(img3,(200,70))
+img6 = pygame.transform.smoothscale(img5,(200,70))
+img8 = pygame.transform.smoothscale(img7,(200,70))
 bg1 = pygame.transform.smoothscale(bg,(width,height))
 ologo1 = pygame.transform.smoothscale(ologo,(800,230))
 settings1 = pygame.transform.smoothscale(setting,(100,35))
@@ -52,23 +56,29 @@ class start:
 
         while self.running:
             screen.blit(bg1,(0,0))
-            screen.blit(img2,(width*0.35,height*0.45))
-            screen.blit(img4,(width*0.35,height*0.65))
+            screen.blit(img2,(width*0.35,height*0.35))
+            screen.blit(img4,(width*0.35,height*0.45))
             screen.blit(ologo1,(15,70))
             screen.blit(settings1,(width-100,15))
+            screen.blit(img8,(width*0.35,height*0.55))
+            screen.blit(img6,(width*0.35,height*0.65))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
                     Game(players)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex, mousey = pygame.mouse.get_pos()
-                    if  width*0.35 <= mousex and  width*0.60 >= mousex and height*0.45 <=mousey and height*0.566 >= mousey:
+                    if  width*0.35 <= mousex and  width*0.60 >= mousex and height*0.35 <=mousey and height*0.433 >= mousey:
                         self.running = False
-                    elif width*0.35 <= mousex and width*0.60 >= mousex and height*0.65 <= mousey and height*0.866 >= mousey:
+                    elif width*0.35 <= mousex and width*0.60 >= mousex and height*0.45 <= mousey and height*0.533 >= mousey:
                         pygame.quit()
                         quit()
                     elif width-100 <= mousex and width >= mousex and 15 <= mousey and 50 >= mousey:
-                        print("hij doet het wel")
+                        print("Settings")
+                    elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.55 <= mousey and height * 0.633 >= mousey:
+                        print("highscores")
+                    elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.65 <= mousey and height * 0.733 >= mousey:
+                        print("how to play")
 
             pygame.display.flip()
 
@@ -156,88 +166,88 @@ class Game:
         self.running = False
 
         # game pic location
-        self.img = pygame.image.load('soldier.png')
+        self.img = pygame.image.load('afbeeldingen/soldier.png')
         self.img = pygame.transform.smoothscale(self.img, (30, 20))
 
-        self.img2 = pygame.image.load('hilton.png')
+        self.img2 = pygame.image.load('afbeeldingen/hilton.png')
         self.img2 = pygame.transform.smoothscale(self.img2, (35, 32))
 
-        self.img3 = pygame.image.load('dedoelen.png')
+        self.img3 = pygame.image.load('afbeeldingen/dedoelen.png')
         self.img3 = pygame.transform.smoothscale(self.img3, (60, 60))
 
-        self.img4 = pygame.image.load('police.png')
+        self.img4 = pygame.image.load('afbeeldingen/police.png')
         self.img4 = pygame.transform.smoothscale(self.img4, (27, 27))
 
-        self.img5 = pygame.image.load('fusrodah.png')
+        self.img5 = pygame.image.load('afbeeldingen/fusrodah.png')
         self.img5 = pygame.transform.smoothscale(self.img5, (23, 23))
 
-        self.img6 = pygame.image.load('bike.png')
+        self.img6 = pygame.image.load('afbeeldingen/bike.png')
         self.img6 = pygame.transform.smoothscale(self.img6, (24, 24))
 
-        self.img7 = pygame.image.load('luxor.png')
+        self.img7 = pygame.image.load('afbeeldingen/luxor.png')
         self.img7 = pygame.transform.smoothscale(self.img7, (45, 40))
 
-        self.img8 = pygame.image.load('kfc.png')
+        self.img8 = pygame.image.load('afbeeldingen/kfc.png')
         self.img8 = pygame.transform.smoothscale(self.img8, (30, 30))
 
-        self.img9 = pygame.image.load('bijenkorf.png')
+        self.img9 = pygame.image.load('afbeeldingen/bijenkorf.png')
         self.img9 = pygame.transform.smoothscale(self.img9, (80, 80))
 
-        self.img10 = pygame.image.load('abn.png')
+        self.img10 = pygame.image.load('afbeeldingen/abn.png')
         self.img10 = pygame.transform.smoothscale(self.img10, (70, 85))
 
-        self.img11 = pygame.image.load('house.png')
+        self.img11 = pygame.image.load('afbeeldingen/house.png')
         self.img11 = pygame.transform.smoothscale(self.img11, (40, 40))
 
-        self.img12 = pygame.image.load('weed.png')
+        self.img12 = pygame.image.load('afbeeldingen/weed.png')
         self.img12 = pygame.transform.smoothscale(self.img12, (30, 30))
 
-        self.img13 = pygame.image.load('camuflage.png')
+        self.img13 = pygame.image.load('afbeeldingen/camuflage.png')
         self.img13 = pygame.transform.smoothscale(self.img13, (20, 20))
 
-        self.img14 = pygame.image.load('kabouter.png')
+        self.img14 = pygame.image.load('afbeeldingen/kabouter.png')
         self.img14 = pygame.transform.smoothscale(self.img14, (55, 55))
 
-        self.img15 = pygame.image.load('ufo.png')
+        self.img15 = pygame.image.load('afbeeldingen/ufo.png')
         self.img15 = pygame.transform.smoothscale(self.img15, (25, 25))
 
-        self.img16 = pygame.image.load('wok.png')
+        self.img16 = pygame.image.load('afbeeldingen/wok.png')
         self.img16 = pygame.transform.smoothscale(self.img16, (40, 20))
 
-        self.img17 = pygame.image.load('hro.png')
+        self.img17 = pygame.image.load('afbeeldingen/hro.png')
         self.img17 = pygame.transform.smoothscale(self.img17, (30, 30))
 
-        self.img18 = pygame.image.load('taxi.png')
+        self.img18 = pygame.image.load('afbeeldingen/taxi.png')
         self.img18 = pygame.transform.smoothscale(self.img18, (23, 23))
 
-        self.img19 = pygame.image.load('erasmus.png')
+        self.img19 = pygame.image.load('afbeeldingen/erasmus.png')
         self.img19 = pygame.transform.smoothscale(self.img19, (80, 50))
 
-        self.img20 = pygame.image.load('tree.png')
+        self.img20 = pygame.image.load('afbeeldingen/tree.png')
         self.img20 = pygame.transform.smoothscale(self.img20, (30, 30))
 
-        self.img21 = pygame.image.load('inntel.png')
+        self.img21 = pygame.image.load('afbeeldingen/inntel.png')
         self.img21 = pygame.transform.smoothscale(self.img21, (30, 30))
 
-        self.img22 = pygame.image.load('kunsthal.png')
+        self.img22 = pygame.image.load('afbeeldingen/kunsthal.png')
         self.img22 = pygame.transform.smoothscale(self.img22, (30, 50))
 
-        self.img23 = pygame.image.load('euromast.png')
+        self.img23 = pygame.image.load('afbeeldingen/euromast.png')
         self.img23 = pygame.transform.smoothscale(self.img23, (80, 65))
 
-        self.img24 = pygame.image.load('time.png')
+        self.img24 = pygame.image.load('afbeeldingen/time.png')
         self.img24 = pygame.transform.smoothscale(self.img24, (20, 20))
 
-        self.img25 = pygame.image.load('oriental.png')
+        self.img25 = pygame.image.load('afbeeldingen/oriental.png')
         self.img25 = pygame.transform.smoothscale(self.img25, (55, 25))
 
-        self.img26 = pygame.image.load('pijl.png')
+        self.img26 = pygame.image.load('afbeeldingen/pijl.png')
         self.img26 = pygame.transform.smoothscale(self.img26, (30, 30))
 
-        self.img27 = pygame.image.load('boat.png')
+        self.img27 = pygame.image.load('afbeeldingen/boat.png')
         self.img27 = pygame.transform.smoothscale(self.img27, (110, 110))
 
-        self.img28 = pygame.image.load('fist.png')
+        self.img28 = pygame.image.load('afbeeldingen/fist.png')
         self.img28 = pygame.transform.smoothscale(self.img28, (20, 20))
 
         # text map
