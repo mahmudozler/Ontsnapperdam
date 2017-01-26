@@ -70,7 +70,7 @@ class Game:
 		self.turn = 0
 		self.players = players
 		self.thrown = 0
-		self.size = (800,850)
+		self.size = (850,850)
 		self.running = False
 
 		#game pic location
@@ -186,6 +186,7 @@ class Game:
 		#colors
 		self.red = (191,36,36)
 		self.black = (23,20,20)
+		self.white = (255,255,255)
 
 		#self.screen = pygame.display.set_mode(self.size)
 		self.blocks = []
@@ -264,26 +265,22 @@ class Game:
 		self.screen = pygame.display.set_mode(self.size,RESIZABLE)
 		self.screen.fill((255, 255, 255))
 
-		#text handles when dice is thrown
-		#if self.thrown > 0:
-			#print("something ha sbeen thrown")
-			#self.screen.blit(self.dice_font.render("{0}".format(self.thrown), True, self.black), (625, 70))
-
-
 		# if dice is thrown
 		if self.thrown > 0:
+			#text handles
 			self.screen.blit(self.dice_font.render("{0}".format(self.thrown), True, self.black), (625, 70))
-			#self.screen.blit(self.info_font.render("Player {0} may walk {0} steps".format(self.turn, self.thrown), True, self.black), (600, 130))
 			if self.thrown < 4 and self.players[self.turn].state == "lock":
-				self.screen.blit(self.info_font.render("player {0} you need to throw 4 + to move!".format(self.turn), True,self.black), (600, 130))
-				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 140))
-			#else:
-				#self.screen.blit(self.info_font.render("player {0} may walk {0} steps".format(self.turn,self.thrown), True, self.black), (600, 130))
+				self.screen.blit(self.info_font.render("player {0} ".format(self.turn), True,self.players[self.turn].kleur), (600, 130))
+				self.screen.blit(self.info_font.render("you need to throw 4 + to move!".format(self.turn), True,self.black), (600, 145))
+				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 175))
+			else:
+				self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
+				self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
 
 		# if dice is not thrown yet
 		else:
-			self.player_turn_text = self.info_font.render("Player {0} throw the dice!".format((self.turn + 1)), True, (10, 10, 10))
-			self.screen.blit(self.player_turn_text, (600, 25))
+			self.screen.blit(self.info_font.render("Player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 25))
+			self.screen.blit(self.info_font.render("throw the dice!", True, (10, 10, 10)),(655, 25))
 			if self.players[self.turn].state == "lock":
 				self.screen.blit(self.info_font.render("Throw 4 or more to get",1,self.black),(600,130))
 				self.screen.blit(self.info_font.render("on Rotterdam Centraal!", 1, self.black),(600, 145))
@@ -394,8 +391,11 @@ class Game:
 			pygame.draw.rect(self.screen, self.red, rectangle, 1)
 
 		# draw all player
+		count = 0
 		for player in self.players:
+			count += 1
 			player.draw(self.screen)
+			self.screen.blit(self.info_font.render("{0}".format(count), 1, self.black), ((player.rect.x + 6), (player.rect.y + 4)))
 
 		#update whole screen
 		pygame.display.flip()
