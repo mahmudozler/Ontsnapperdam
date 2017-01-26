@@ -110,7 +110,7 @@ screen = pygame.display.set_mode((width,height))
 
 #back button
 img5 = pygame.image.load('back.png')
-img6 = pygame.transform.smoothscale(img5,(100, 100))
+img6 = pygame.transform.smoothscale(img5,(200, 70))
 
 defaultfont = pygame.font.get_default_font()
 fontrenderer = pygame.font.Font(defaultfont,85)
@@ -127,8 +127,7 @@ class hsscreen:
 		while self.running:
 			screen.blit(bg1,(0,0))
 			screen.blit(label3,(200,15))
-			#screen.blit(score_text, (100, 175))
-			screen.blit(img6,(50,25))
+			screen.blit(img6,(50,730))
 
 			#list
 			count = 0
