@@ -17,12 +17,13 @@ class Player:
 		self.rect = pygame.Rect(self.x, self.y, 20, 20)
 		self.steps = 0
 		self.startblock = pygame.Rect(249, 51, 103, 25)
+		self.quests = []
 		self.state = "lock"
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
 
-	def Update(self,screen,event,blocks,battleblocks):
+	def Update(self,screen,event,blocks,battleblocks,landmarkblocks):
 		if event.type == pygame.KEYDOWN:
 			# to check the new position is within the game blocks
 			newpos = self.rect.copy()
@@ -50,14 +51,36 @@ class Player:
 			# bool check is newpos is inside game rectangles
 			for rectangle in blocks:
 				if newpos.colliderect(rectangle):
-					print(newpos)
+					#print(newpos)
+
 					# convert newpos in the new position
-					self.steps += 1
+					if event.key == K_LEFT or event.key == K_RIGHT or event.key == K_UP or event.key == K_DOWN:
+						self.steps += 1
 					self.rect = newpos
 					for rectangle in battleblocks:
 						if newpos.colliderect(rectangle):
 							print("LETS BATTLE!")
 							break # stop check when battle block match
+
+					for rectangle in landmarkblocks:
+						if newpos.colliderect(rectangle[2]):
+							print("LANDMARK")
+							count = 0
+							for quest in self.quests:
+								if newpos in quest:
+									print("one quest done")
+									#self.quest[1] = 1
+								#print("#")
+
+
+
+							break  # stop check when battle block match
+
+					"""for rectangle in landmarkblocks:
+						if newpos.colliderect(rectangle):
+							print("LANDMARK")
+							break  # stop check when battle block match"""
+
 					# stop check when matched
 					break
 
@@ -72,8 +95,20 @@ class Game:
 		self.thrown = 0
 		self.size = (850,850)
 		self.running = False
+		self.landmarks = []
+		self.landmark_namelist = [["hilton hotel",0],["de doelen",0],["luxor theater",0],["bijenkorf",0],["kfc",0],["coffeeshop amigo",0],["abn amro",0],["janzen huizen",0],["kabouter buttplug",0],
+		["wok to go",0],["hogeschool rotterdam",0],["kfc binnenweg",0],["inntel hotel",0],["museumpark orientalis",0],["erasmus mc",0],["amazing oriental",0],["euromast",0],["kunsthall rotterdam",0]]
 
-		#game pic location
+		#generate 3 unique quests or every player
+		for player in self.players:
+			count = 0
+			while count < 3:
+				new_landmark = random.choice(self.landmark_namelist)
+				if new_landmark not in player.quests:
+					player.quests.append(new_landmark)
+					count += 1
+
+		# Load game pic locations
 		self.img = pygame.image.load('img/soldier.png')
 		self.img = pygame.transform.smoothscale(self.img,(30,20 ))
 
@@ -158,14 +193,14 @@ class Game:
 		self.img28 = pygame.image.load('img/fist.png')
 		self.img28= pygame.transform.smoothscale(self.img28,(20,20 ))
 
-		# font list
+		# Font list
 		self.mapfont = pygame.font.SysFont(None,15)
 		self.landmark_font = pygame.font.SysFont(None, 30)
 		self.suprise_font = pygame.font.SysFont(None, 32)
 		self.info_font = pygame.font.SysFont(None, 20)
 		self.dice_font = pygame.font.SysFont(None, 50)
 
-		#landmarks on map
+		# Write landmarks on map
 		self.text = self.mapfont.render("Rotterdam centraal",True,(0,0,0))
 		self.text1 = self.landmark_font.render("L",True,(0,0,0))
 		self.text2 = self.mapfont.render("Coffeeshop Amigo",True,(0,0,0))
@@ -191,6 +226,7 @@ class Game:
 		#self.screen = pygame.display.set_mode(self.size)
 		self.blocks = []
 		self.battleblocks = []
+		self.landmarkblocks = []
 
 		self.map_list = [[0,1,2,3,4,5,6,7,8,12,13,14,15,16,17,18,19],[0,9,19],[0,9,10,19],[0,10,19],[0,10,19],
 					[0,1,2,4,5,6,7,8,9,10,11,12,13,19],[0,2,4,8,13,17,18,19],[0,2,3,4,8,13,17,19],[0,4,8,11,12,13,14,15,16,17,19],[0,4,8,11,19],
@@ -199,6 +235,7 @@ class Game:
 					[0,6,15,19],[0,6,7,8,9,10,11,12,13,14,15,19],[0,1,2,3,4,5,6,8,15,19],[3,8,13,14,15,19],[3,8,13,19],[3,8,13,19],[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]]
 		self.battle_map_list= [[],[],[],[0],[0],[0,1],[0],[13,17],[8,13,14,15,16,17],[8],[7,8],[],[13,14],[3,4,5,6,13],
 			[3,6,13],[13],[13],[13,14],[],[],[],[],[],[],[],[3,4,5,6],[3,13],[13],[13],[11,12,13]]
+		self.landmark_maplist = [[],[],[19],[],[],[3],[17],[],[],[11],[5],[],[0,16],[],[8],[],[],[8,15],[],[19],[],[4],[],[15],[11],[0],[],[3,8],[],[16]]
 
 		# Create list with all block position in the game
 		for row in range(30):
@@ -211,6 +248,19 @@ class Game:
 					self.blocks.append(
 						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50),
 									self.w, self.h))
+
+					#create list with all landmark block positions
+					if self.Filter(col, row,self.landmark_maplist):
+						self.landmarkblocks.append(
+							pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50),
+										self.w, self.h))
+
+		# Create complete landmark list( name + cordinates + visit check)
+		count = 0
+		for l in range(17):
+			self.landmarks.append(self.landmark_namelist[count])
+			self.landmarks[count].append(self.landmarkblocks[count])
+			count += 1
 
 		# special blocks
 		self.startblock = self.blocks[8]
@@ -230,7 +280,7 @@ class Game:
 			player.state = "start"
 
 			if event.type == pygame.KEYDOWN:
-				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks)
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks)
 
 				# if all steps made reset dice throw and set turn to next player
 				if player.steps == self.thrown:
@@ -243,7 +293,7 @@ class Game:
 
 		else:
 			if event.type == pygame.KEYDOWN:
-				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks)
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks)
 
 				# if all steps made
 				if player.steps == self.thrown:
@@ -457,13 +507,17 @@ p4 = Player("D",(116,59,124),278,28)
 p5 = Player("E",(237,65,56),304,28)
 p6 = Player("F",(0,0,0),330,28)
 
-players = [p1,p2,p3,p4]
+players = [p1,p2]
 
-#game = Game(players)
-#for x in game.blocks:
+game = Game(players)
+print(game.landmarks[0])
+#for x in game.landmarks:
 #	print(x)
 
-#game.Gameloop()
+print(p1.quests)
+print(p2.quests)
+
+game.Gameloop()
 
 
 
