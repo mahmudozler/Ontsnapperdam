@@ -405,7 +405,9 @@ class Game:
 		while not self.running:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
-					self.running = True
+					#self.running = True
+					pygame.quit()
+					quit()
 
 				# If click on dice
 				if event.type == pygame.MOUSEBUTTONDOWN:
@@ -445,13 +447,12 @@ player6 = Player("F",(0,0,0),330,28)
 
 players = [player1,player2,player3]
 
-#game = Game(players)
-#for x in game.blocks:
-#	print(x)
-
-#game.Gameloop()
-
-
+# game = Game(players)
+# for x in game.blocks:
+# 	print(x)
+#
+# game.Gameloop()
+#
 
 	
 
