@@ -23,7 +23,7 @@ class Player:
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
 
-	def Update(self,screen,event,blocks,battleblocks,landmarkblocks):
+	def Update(self,screen,event,blocks,battleblocks,landmarks):
 		if event.type == pygame.KEYDOWN:
 			# to check the new position is within the game blocks
 			newpos = self.rect.copy()
@@ -62,24 +62,22 @@ class Player:
 							print("LETS BATTLE!")
 							break # stop check when battle block match
 
-					for rectangle in landmarkblocks:
+					for rectangle in landmarks:
 						if newpos.colliderect(rectangle[2]):
-							print("LANDMARK")
+							print("LANDMARK HIT")
 							count = 0
+							#print(rectangle)
 							for quest in self.quests:
-								if newpos in quest:
+								if rectangle == quest:
 									print("one quest done")
-									#self.quest[1] = 1
-								#print("#")
-
+									index = self.quests.index(quest)
+									self.quests[index][1] = 1
+									count += 1
+								print(quest)
 
 
 							break  # stop check when battle block match
 
-					"""for rectangle in landmarkblocks:
-						if newpos.colliderect(rectangle):
-							print("LANDMARK")
-							break  # stop check when battle block match"""
 
 					# stop check when matched
 					break
@@ -235,7 +233,7 @@ class Game:
 					[0,6,15,19],[0,6,7,8,9,10,11,12,13,14,15,19],[0,1,2,3,4,5,6,8,15,19],[3,8,13,14,15,19],[3,8,13,19],[3,8,13,19],[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]]
 		self.battle_map_list= [[],[],[],[0],[0],[0,1],[0],[13,17],[8,13,14,15,16,17],[8],[7,8],[],[13,14],[3,4,5,6,13],
 			[3,6,13],[13],[13],[13,14],[],[],[],[],[],[],[],[3,4,5,6],[3,13],[13],[13],[11,12,13]]
-		self.landmark_maplist = [[],[],[19],[],[],[3],[17],[],[],[11],[5],[],[0,16],[],[8],[],[],[8,15],[],[19],[],[4],[],[15],[11],[0],[],[3,8],[],[16]]
+		self.landmark_maplist = [[],[],[19],[],[],[2],[17],[],[],[11],[5],[],[0,16],[],[8],[],[],[8,15],[],[19],[],[4],[],[15],[11],[0],[],[3,8],[],[16]]
 
 		# Create list with all block position in the game
 		for row in range(30):
@@ -257,7 +255,7 @@ class Game:
 
 		# Create complete landmark list( name + cordinates + visit check)
 		count = 0
-		for l in range(17):
+		for l in range(18):
 			self.landmarks.append(self.landmark_namelist[count])
 			self.landmarks[count].append(self.landmarkblocks[count])
 			count += 1
@@ -513,6 +511,7 @@ game = Game(players)
 print(game.landmarks[0])
 #for x in game.landmarks:
 #	print(x)
+
 
 print(p1.quests)
 print(p2.quests)
