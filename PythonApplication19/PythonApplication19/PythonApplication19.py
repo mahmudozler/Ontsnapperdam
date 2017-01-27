@@ -70,7 +70,7 @@ class Game:
 		self.turn = 0
 		self.players = players
 		self.thrown = 0
-		self.size = (800,850)
+		self.size = (850,850)
 		self.running = False
 
 		#game pic location
@@ -186,6 +186,7 @@ class Game:
 		#colors
 		self.red = (191,36,36)
 		self.black = (23,20,20)
+		self.white = (255,255,255)
 
 		#self.screen = pygame.display.set_mode(self.size)
 		self.blocks = []
@@ -220,6 +221,8 @@ class Game:
 	def Update(self, event):
 		player = self.players[self.turn]
 		#print(event.type)
+		if self.thrown < 4 and player.state == "lock":
+			return
 
 		self.Draw()
 		# if player throws 4 or more at start, let player in gameboard
@@ -237,15 +240,6 @@ class Game:
 					else:
 						self.turn += 1
 					player.steps = 0
-
-		# if player throws less than 4 at start
-
-		elif self.thrown < 4 and player.state == "lock":
-			self.thrown = 0
-			if self.turn < (len(self.players) - 1):
-				self.turn += 1
-			else:
-				self.turn = 0
 
 		else:
 			if event.type == pygame.KEYDOWN:
@@ -271,20 +265,28 @@ class Game:
 		self.screen = pygame.display.set_mode(self.size,RESIZABLE)
 		self.screen.fill((255, 255, 255))
 
-		#text handles when dice is thrown
+		# if dice is thrown
 		if self.thrown > 0:
-			print("soemthing ha sbeen thrown")
 
-		if self.thrown > 0:
-			#self.dice_text = self.thrown
+			#text handles
 			self.screen.blit(self.dice_font.render("{0}".format(self.thrown), True, self.black), (625, 70))
+			self.screen.blit(self.info_font.render("You have thrown:", True, self.black), (600, 30))
+			if self.thrown < 4 and self.players[self.turn].state == "lock":
+				self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True,self.players[self.turn].kleur), (600, 130))
+				self.screen.blit(self.info_font.render("you need to throw 4 or more".format(self.turn), True,self.black), (600, 145))
+				self.screen.blit(self.info_font.render("to enter Rotterdam centraal!".format(self.turn), True, self.black),(600, 160))
+				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 190))
+			else:
+				self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
+				self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
+
+		# if dice is not thrown yet
 		else:
-			self.player_turn_text = self.info_font.render("Player {0} throw the dice!".format((self.turn + 1)), True, (10, 10, 10))
-			self.screen.blit(self.player_turn_text, (600, 25))
+			self.screen.blit(self.info_font.render("Player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 25))
+			self.screen.blit(self.info_font.render("throw the dice!", True, (10, 10, 10)),(655, 25))
 			if self.players[self.turn].state == "lock":
 				self.screen.blit(self.info_font.render("Throw 4 or more to get",1,self.black),(600,130))
 				self.screen.blit(self.info_font.render("on Rotterdam Centraal!", 1, self.black),(600, 145))
-
 
 		#draw dice button
 		pygame.draw.rect(self.screen, (0, 0, 0), (600, 50, 70, 70), 1)
@@ -392,8 +394,11 @@ class Game:
 			pygame.draw.rect(self.screen, self.red, rectangle, 1)
 
 		# draw all player
+		count = 0
 		for player in self.players:
+			count += 1
 			player.draw(self.screen)
+			self.screen.blit(self.info_font.render("{0}".format(count), 1, self.black), ((player.rect.x + 6), (player.rect.y + 4)))
 
 		#update whole screen
 		pygame.display.flip()
@@ -432,18 +437,27 @@ class Game:
 						self.Update(event)
 
 						self.Draw()
+
+					#if players throw below 4 in first turn, push turn to next player
+					if event.key == K_RETURN and self.thrown > 0 and self.players[self.turn].state == "lock":
+						self.thrown = 0
+						if self.turn < (len(self.players) - 1):
+							self.turn += 1
+						else:
+							self.turn = 0
+						self.Draw()
 			# ...
 			#pygame.display.flip()
 
 
-player1 = Player("A",(255,0,0),200,28)
-player2 = Player("B",(0,255,0),226,28)
-player3 = Player("C",(0,0,255),252,28)
-player4 = Player("D",(116,59,124),278,28)
-player5 = Player("E",(237,65,56),304,28)
-player6 = Player("F",(0,0,0),330,28)
+p1 = Player("A",(255,0,0),200,28)
+p2 = Player("B",(0,255,0),226,28)
+p3 = Player("C",(0,0,255),252,28)
+p4 = Player("D",(116,59,124),278,28)
+p5 = Player("E",(237,65,56),304,28)
+p6 = Player("F",(0,0,0),330,28)
 
-players = [player1,player2,player3]
+players = [p1,p2,p3,p4]
 
 #game = Game(players)
 #for x in game.blocks:

@@ -1,0 +1,6 @@
+﻿Danger perry --> 0
+Lord satrya --> 0
+The Lion mahmut --> 0
+Brede mike --> 0
+Gamer shane --> 0
+The program '[1560] python.exe' has exited with code -1073741510 (0xc000013a).
