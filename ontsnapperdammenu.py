@@ -72,9 +72,9 @@ class start:
             screen.blit(settings1,(width-100,15))
             screen.blit(img8,(width*0.35,height*0.55))
             screen.blit(img6,(width*0.35,height*0.65))
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mousex, mousey = pygame.mouse.get_pos()
+                if width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.35 <= mousey and height * 0.433 >= mousey
                     Game(players)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex, mousey = pygame.mouse.get_pos()
