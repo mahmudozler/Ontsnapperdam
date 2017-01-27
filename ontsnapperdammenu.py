@@ -7,7 +7,7 @@ import PythonApplication19
 from PythonApplication19 import *
 import Terminate_screen
 import howtoplay
-import PythonApplication25
+#import PythonApplication25
 
 
 pygame.init()
@@ -72,9 +72,9 @@ class start:
             screen.blit(settings1,(width-100,15))
             screen.blit(img8,(width*0.35,height*0.55))
             screen.blit(img6,(width*0.35,height*0.65))
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mousex, mousey = pygame.mouse.get_pos()
-                if width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.35 <= mousey and height * 0.433 >= mousey
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
                     Game(players)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex, mousey = pygame.mouse.get_pos()
@@ -90,7 +90,8 @@ class start:
                     elif width-100 <= mousex and width >= mousex and 15 <= mousey and 50 >= mousey:
                         print("Settings")
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.55 <= mousey and height * 0.633 >= mousey:
-                        highscores.introo()
+                        #highscores.introo()
+                        print("hoi")
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.65 <= mousey and height * 0.733 >= mousey:
 
                         how.loop()
@@ -103,7 +104,7 @@ class start:
 menu = start()
 termination = Terminate_screen.Termination()
 how = howtoplay.mainloop()
-highscores = PythonApplication25.hsscreen()
+#highscores = PythonApplication25.hsscreen()
 menu.intro()
 
 
