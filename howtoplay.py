@@ -1,7 +1,5 @@
 import random, time, pygame, sys
 from pygame.locals import *
-import ontsnapperdammenu
-
 
 
 pygame.init()
@@ -23,10 +21,11 @@ textRectObj.center = (400, 15)
 
 
 
-
 class mainloop:
+
 	def loop(self):
-		while True:
+		running = True
+		while running:
 			DISPLAYSURF.fill(WHITE)
 			DISPLAYSURF.blit(rulesImg, (75, 30))
 			DISPLAYSURF.blit(textSurfaceObj, textRectObj)
@@ -38,9 +37,7 @@ class mainloop:
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					mousex, mousey = pygame.mouse.get_pos()
 					if mousex <= 50 and mousey <= 50:
-						menu = ontsnapperdammenu.start()
-						menu.intro()
-
+						running = False
 			pygame.display.flip()
-
+#how = howtoplay()
 #how.loop()

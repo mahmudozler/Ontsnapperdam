@@ -146,15 +146,3 @@ class hsscreen:
  
             pygame.display.flip()
  
- 
-hs = hsscreen()
- 
-done = False
- 
- 
-class Program:
-    hs.introo()
-   
- 
- 
-Program()

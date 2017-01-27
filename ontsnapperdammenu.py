@@ -5,12 +5,9 @@ import time
 import random
 import PythonApplication19
 from PythonApplication19 import *
+import Terminate_screen
 import howtoplay
-from howtoplay import *
-
-how = howtoplay
-
-#how2 = how.mainloop()
+import PythonApplication25
 
 
 pygame.init()
@@ -87,23 +84,28 @@ class start:
                         game.Gameloop()
 
                     elif width*0.35 <= mousex and width*0.60 >= mousex and height*0.45 <= mousey and height*0.533 >= mousey:
-                        pygame.quit()
-                        quit()
+                        termination.Gameloop()
+                        #pygame.quit()
+                        #quit()
                     elif width-100 <= mousex and width >= mousex and 15 <= mousey and 50 >= mousey:
                         print("Settings")
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.55 <= mousey and height * 0.633 >= mousey:
-                        print("highscores")
+                        highscores.introo()
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.65 <= mousey and height * 0.733 >= mousey:
-                        #how = howtoplay.mainloop()
-                        #how.loop()
-                        how
+
+                        how.loop()
+
 
 
             pygame.display.flip()
 
 
 menu = start()
+termination = Terminate_screen.Termination()
+how = howtoplay.mainloop()
+highscores = PythonApplication25.hsscreen()
 menu.intro()
+
 
 
 
