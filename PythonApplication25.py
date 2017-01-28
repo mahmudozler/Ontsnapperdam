@@ -9,7 +9,7 @@ import psycopg2
 # Use the database
 def interact_with_database(command):
     # Connect and set up cursor
-    connection = psycopg2.connect("dbname=postgres user=postgres password='2450086'")
+    connection = psycopg2.connect("dbname=postgres user=postgres password='0'")
     cursor = connection.cursor()
    
     # Execute the command
