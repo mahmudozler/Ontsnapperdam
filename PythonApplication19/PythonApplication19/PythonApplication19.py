@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import random
+import copy
 pygame.font.init()
 
 pygame.init()
@@ -66,17 +67,14 @@ class Player:
 						if newpos.colliderect(rectangle[2]):
 							print("LANDMARK HIT")
 							count = 0
-							#print(rectangle)
 							for quest in self.quests:
-								if rectangle == quest:
-									print("one quest done")
-									index = self.quests.index(quest)
-									self.quests[index][1] = 1
+								if newpos.colliderect(quest[2]):
+									print("quest check")
+									self.quests[count][1] = 1
+									break
+								else:
 									count += 1
-								print(quest)
-
-
-							break  # stop check when battle block match
+									print("no check")
 
 
 					# stop check when matched
@@ -96,15 +94,6 @@ class Game:
 		self.landmarks = []
 		self.landmark_namelist = [["hilton hotel",0],["de doelen",0],["luxor theater",0],["bijenkorf",0],["kfc",0],["coffeeshop amigo",0],["abn amro",0],["janzen huizen",0],["kabouter buttplug",0],
 		["wok to go",0],["hogeschool rotterdam",0],["kfc binnenweg",0],["inntel hotel",0],["museumpark orientalis",0],["erasmus mc",0],["amazing oriental",0],["euromast",0],["kunsthall rotterdam",0]]
-
-		#generate 3 unique quests or every player
-		for player in self.players:
-			count = 0
-			while count < 3:
-				new_landmark = random.choice(self.landmark_namelist)
-				if new_landmark not in player.quests:
-					player.quests.append(new_landmark)
-					count += 1
 
 		# Load game pic locations
 		self.img = pygame.image.load('img/soldier.png')
@@ -260,6 +249,16 @@ class Game:
 			self.landmarks.append(self.landmark_namelist[count])
 			self.landmarks[count].append(self.landmarkblocks[count])
 			count += 1
+
+		# generate 3 unique quests or every player
+		for player in self.players:
+			count = 0
+			while count < 3:
+				new_landmark = random.choice(self.landmarks)
+				if new_landmark not in player.quests:
+					player.quests.append(
+						copy.deepcopy(new_landmark))  # copy.deepcopy to not change the original list!!!!!
+					count += 1
 
 		# special blocks
 		self.startblock = self.blocks[8]

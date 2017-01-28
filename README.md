@@ -17,3 +17,5 @@
 **26/01/2017** - Added dice instruction/info text each turn, added player number
 
 **27/01/2017** - Add displays can now be connected, settings screen added, quest system implemented, all displays classified
+
+**28/01/2017** - Database updated, surprise locations added, Quest check bug fixed(original list changed)
