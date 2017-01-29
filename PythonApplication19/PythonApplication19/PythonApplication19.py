@@ -71,6 +71,7 @@ class Player:
 								if newpos.colliderect(quest[2]):
 									print("quest check")
 									self.quests[count][1] = 1
+									print(self.quests)
 									break
 								else:
 									count += 1
@@ -96,6 +97,9 @@ class Game:
 		["wok to go",0],["hogeschool rotterdam",0],["kfc binnenweg",0],["inntel hotel",0],["museumpark orientalis",0],["erasmus mc",0],["amazing oriental",0],["euromast",0],["kunsthall rotterdam",0]]
 
 		# Load game pic locations
+		self.dice_img = pygame.image.load('img/dice_throw.png')
+		self.check_img = pygame.transform.smoothscale(pygame.image.load('img/check.png'),(13,13))
+
 		self.img = pygame.image.load('img/soldier.png')
 		self.img = pygame.transform.smoothscale(self.img,(30,20 ))
 
@@ -124,7 +128,7 @@ class Game:
 		self.img9 = pygame.transform.smoothscale(self.img9,(80,80 ))
 
 		self.img10 = pygame.image.load('img/abn.png')
-		self.img10 = pygame.transform.smoothscale(self.img10,(70,85 ))
+		self.img10 = pygame.transform.smoothscale(self.img10,(50,37 ))
 
 		self.img11 = pygame.image.load('img/house.png')
 		self.img11 = pygame.transform.smoothscale(self.img11,(40,40 ))
@@ -209,6 +213,8 @@ class Game:
 		self.red = (191,36,36)
 		self.black = (23,20,20)
 		self.white = (255,255,255)
+		self.grey = (133,133,133)
+		self.darkgreen = (22,117,35)
 
 		#self.screen = pygame.display.set_mode(self.size)
 		self.blocks = []
@@ -230,17 +236,17 @@ class Game:
 			for col in range(30):
 				if self.Filter(col, row,self.battle_map_list):
 					self.battleblocks.append(
-						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50),
+						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
 									self.w, self.h))
 				elif self.Filter(col, row,self.map_list):
 					self.blocks.append(
-						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50),
+						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
 									self.w, self.h))
 
 					#create list with all landmark block positions
 					if self.Filter(col, row,self.landmark_maplist):
 						self.landmarkblocks.append(
-							pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50),
+							pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
 										self.w, self.h))
 
 		# Create complete landmark list( name + cordinates + visit check)
@@ -311,7 +317,14 @@ class Game:
 
 		#draw canvas
 		self.screen = pygame.display.set_mode(self.size,RESIZABLE)
-		self.screen.fill((255, 255, 255))
+		self.screen.fill((250, 250, 250))
+
+		# draw game board
+		for rectangle in self.blocks:
+			pygame.draw.rect(self.screen, self.grey, rectangle,1)
+
+		for rectangle in self.battleblocks:
+			pygame.draw.rect(self.screen, self.red, rectangle, 1)
 
 		# if dice is thrown
 		if self.thrown > 0:
@@ -328,10 +341,41 @@ class Game:
 				self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
 				self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
 
+				#display quests block
+				pygame.draw.rect(self.screen, (227,227,227), (600,180,200,170))
+				self.screen.blit(self.info_font.render("Quests:", True, self.black), (620, 190))
+				count = 0
+				for quest in self.players[self.turn].quests:
+					self.screen.blit(self.info_font.render("- {}".format(quest[0]), True, self.black), (620, 220 + (40 * count)))
+					# Display text if quest is done or not done
+					if quest[1] == 0:
+						self.screen.blit(self.info_font.render("not done yet",True, self.grey),(630, 235 + (40 * count)))
+					else:
+						self.screen.blit(self.info_font.render("done!", True, self.darkgreen),(630, 235 + (40 * count)))
+						self.screen.blit(self.check_img,(667, 235 + (40 * count)))
+					count += 1
+
+
 		# if dice is not thrown yet
 		else:
+			self.screen.blit(pygame.transform.smoothscale(self.dice_img,(50,50)),(610,60))
 			self.screen.blit(self.info_font.render("Player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 25))
 			self.screen.blit(self.info_font.render("throw the dice!", True, (10, 10, 10)),(655, 25))
+
+			# display quests block
+			pygame.draw.rect(self.screen, (227, 227, 227), (600, 180, 200, 170))
+			self.screen.blit(self.info_font.render("Quests:", True, self.black), (620, 190))
+			count = 0
+			for quest in self.players[self.turn].quests:
+				self.screen.blit(self.info_font.render("- {}".format(quest[0]), True, self.black),(620, 220 + (40 * count)))
+				# Display text if quest is done or not done
+				if quest[1] == 0:
+					self.screen.blit(self.info_font.render("not done yet", True, self.grey), (630, 235 + (40 * count)))
+				else:
+					self.screen.blit(self.info_font.render("done!", True, self.darkgreen), (630, 235 + (40 * count)))
+					self.screen.blit(self.check_img, (667, 235 + (40 * count)))
+				count += 1
+
 			if self.players[self.turn].state == "lock":
 				self.screen.blit(self.info_font.render("Throw 4 or more to get",1,self.black),(600,130))
 				self.screen.blit(self.info_font.render("on Rotterdam Centraal!", 1, self.black),(600, 145))
@@ -340,106 +384,99 @@ class Game:
 		pygame.draw.rect(self.screen, (0, 0, 0), (600, 50, 70, 70), 1)
 
 		# paste all images
-		self.screen.blit(self.img, (510, 420))
-		self.screen.blit(self.img2, (500, 100))
-		self.screen.blit(self.img3, (77, 130))
-		self.screen.blit(self.img4, (378, 179))
-		self.screen.blit(self.img4, (144, 257))
-		self.screen.blit(self.img4, (534, 413))
-		self.screen.blit(self.img5, (42, 235))
-		self.screen.blit(self.img6, (250, 258))
-		self.screen.blit(self.img7, (435, 195))
-		self.screen.blit(self.img8, (170, 282))
-		self.screen.blit(self.img9, (353, 260))
-		self.screen.blit(self.img10, (473, 330))
-		self.screen.blit(self.img11, (235, 374))
-		self.screen.blit(self.img12, (65, 360))
-		self.screen.blit(self.img13, (70, 445))
-		self.screen.blit(self.img14, (240, 438))
-		self.screen.blit(self.img4, (274, 491))
-		self.screen.blit(self.img15, (379, 440))
-		self.screen.blit(self.img16, (415, 470))
-		self.screen.blit(self.img17, (505, 542))
-		self.screen.blit(self.img18, (276, 571))
-		self.screen.blit(self.img8, (130, 570))
-		self.screen.blit(self.img19, (70, 650))
-		self.screen.blit(self.img20, (296, 645))
-		self.screen.blit(self.img20, (324, 645))
-		self.screen.blit(self.img20, (352, 645))
-		self.screen.blit(self.img21, (458, 647))
-		self.screen.blit(self.img4, (92, 518))
-		self.screen.blit(self.img22, (458, 750))
-		self.screen.blit(self.img4, (430, 725))
-		self.screen.blit(self.img23, (250, 740))
-		self.screen.blit(self.img24, (200, 703))
-		self.screen.blit(self.img25, (145, 755))
-		self.screen.blit(self.img26, (118, 778))
-		self.screen.blit(self.img27, (10, 720))
-		self.screen.blit(self.img28, (329, 808))
+		self.screen.blit(self.img, (510, 400))
+		self.screen.blit(self.img2, (500, 80))
+		self.screen.blit(self.img3, (77, 110))
+		self.screen.blit(self.img4, (378, 159))
+		self.screen.blit(self.img4, (144, 237))
+		self.screen.blit(self.img4, (534, 393))
+		self.screen.blit(self.img5, (42, 215))
+		self.screen.blit(self.img6, (250, 238))
+		self.screen.blit(self.img7, (435, 175))
+		self.screen.blit(self.img8, (170, 262))
+		self.screen.blit(self.img9, (353, 240))
+		self.screen.blit(self.img10, (483, 340))
+		self.screen.blit(self.img11, (235, 354))
+		self.screen.blit(self.img12, (65, 340))
+		self.screen.blit(self.img13, (70, 425))
+		self.screen.blit(self.img14, (240, 418))
+		self.screen.blit(self.img4, (274, 471))
+		self.screen.blit(self.img15, (379, 420))
+		self.screen.blit(self.img16, (415, 450))
+		self.screen.blit(self.img17, (505, 522))
+		self.screen.blit(self.img18, (276, 551))
+		self.screen.blit(self.img8, (130, 550))
+		self.screen.blit(self.img19, (70, 630))
+		self.screen.blit(self.img20, (296, 625))
+		self.screen.blit(self.img20, (324, 625))
+		self.screen.blit(self.img20, (352, 625))
+		self.screen.blit(self.img21, (458, 627))
+		self.screen.blit(self.img4, (92, 498))
+		self.screen.blit(self.img22, (458, 730))
+		self.screen.blit(self.img4, (430, 705))
+		self.screen.blit(self.img23, (250, 720))
+		self.screen.blit(self.img24, (200, 683))
+		self.screen.blit(self.img25, (145, 735))
+		self.screen.blit(self.img26, (118, 758))
+		self.screen.blit(self.img27, (10, 700))
+		self.screen.blit(self.img28, (329, 788))
 
 		# text map
-		self.screen.blit(self.text, (254, 57))
-		self.screen.blit(self.text2, (67, 350))
-		self.screen.blit(self.text3, (240, 365))
-		self.screen.blit(self.text4, (240, 440))
-		self.screen.blit(self.text5, (308, 630))
-		self.screen.blit(self.text6, (300, 760))
+		self.screen.blit(self.text, (254, 37))
+		self.screen.blit(self.text2, (67, 330))
+		self.screen.blit(self.text3, (240, 345))
+		self.screen.blit(self.text4, (240, 420))
+		self.screen.blit(self.text5, (308, 610))
+		self.screen.blit(self.text6, (300, 740))
 
 		# L
-		self.screen.blit(self.text1, (542, 107))
-		self.screen.blit(self.text1, (542, 550))
-		self.screen.blit(self.text1, (490, 212))
-		self.screen.blit(self.text1, (463, 367))
-		self.screen.blit(self.text1, (437, 497))
-		self.screen.blit(self.text1, (437, 653))
-		self.screen.blit(self.text1, (463, 810))
-		self.screen.blit(self.text1, (100, 185))
-		self.screen.blit(self.text1, (177, 315))
-		self.screen.blit(self.text1, (47, 367))
-		self.screen.blit(self.text1, (333, 289))
-		self.screen.blit(self.text1, (255, 419))
-		self.screen.blit(self.text1, (255, 498))
-		self.screen.blit(self.text1, (333, 679))
-		self.screen.blit(self.text1, (255, 757))
-		self.screen.blit(self.text1, (125, 757))
-		self.screen.blit(self.text1, (150, 600))
-		self.screen.blit(self.text1, (48, 705))
+		self.screen.blit(self.text1, (542, 87))
+		self.screen.blit(self.text1, (542, 530))
+		self.screen.blit(self.text1, (490, 192))
+		self.screen.blit(self.text1, (463, 347))
+		self.screen.blit(self.text1, (437, 477))
+		self.screen.blit(self.text1, (437, 633))
+		self.screen.blit(self.text1, (463, 790))
+		self.screen.blit(self.text1, (100, 165))
+		self.screen.blit(self.text1, (177, 295))
+		self.screen.blit(self.text1, (47, 347))
+		self.screen.blit(self.text1, (333, 269))
+		self.screen.blit(self.text1, (255, 399))
+		self.screen.blit(self.text1, (255, 478))
+		self.screen.blit(self.text1, (333, 659))
+		self.screen.blit(self.text1, (255, 737))
+		self.screen.blit(self.text1, (125, 737))
+		self.screen.blit(self.text1, (150, 580))
+		self.screen.blit(self.text1, (48, 685))
 		# !?
-		self.screen.blit(self.text7, (121, 54))
-		self.screen.blit(self.text7, (408, 54))
-		self.screen.blit(self.text7, (305, 105))
-		self.screen.blit(self.text7, (356, 184))
-		self.screen.blit(self.text7, (200, 184))
-		self.screen.blit(self.text7, (200, 313))
-		self.screen.blit(self.text7, (200, 470))
-		self.screen.blit(self.text7, (200, 600))
-		self.screen.blit(self.text7, (44, 184))
-		self.screen.blit(self.text7, (95, 235))
-		self.screen.blit(self.text7, (122, 391))
-		self.screen.blit(self.text7, (122, 704))
-		self.screen.blit(self.text7, (122, 808))
-		self.screen.blit(self.text7, (44, 522))
-		self.screen.blit(self.text7, (382, 262))
-		self.screen.blit(self.text7, (382, 495))
-		self.screen.blit(self.text7, (382, 600))
-		self.screen.blit(self.text7, (382, 677))
-		self.screen.blit(self.text7, (485, 262))
-		self.screen.blit(self.text7, (538, 313))
-		self.screen.blit(self.text7, (538, 392))
-		self.screen.blit(self.text7, (538, 678))
-		self.screen.blit(self.text7, (252, 678))
-		self.screen.blit(self.text7, (434, 313))
-		self.screen.blit(self.text7, (330, 340))
-		self.screen.blit(self.text7, (460, 443))
-		self.screen.blit(self.text7, (305, 808))
-		self.screen.blit(self.text7, (512, 808))
-
-		# draw game board
-		for rectangle in self.blocks:
-			pygame.draw.rect(self.screen, self.black, rectangle, 1)
-
-		for rectangle in self.battleblocks:
-			pygame.draw.rect(self.screen, self.red, rectangle, 1)
+		self.screen.blit(self.text7, (121, 34))
+		self.screen.blit(self.text7, (408, 34))
+		self.screen.blit(self.text7, (305, 85))
+		self.screen.blit(self.text7, (356, 164))
+		self.screen.blit(self.text7, (200, 164))
+		self.screen.blit(self.text7, (200, 293))
+		self.screen.blit(self.text7, (200, 450))
+		self.screen.blit(self.text7, (200, 580))
+		self.screen.blit(self.text7, (44, 164))
+		self.screen.blit(self.text7, (95, 215))
+		self.screen.blit(self.text7, (122, 371))
+		self.screen.blit(self.text7, (122, 684))
+		self.screen.blit(self.text7, (122, 788))
+		self.screen.blit(self.text7, (44, 502))
+		self.screen.blit(self.text7, (382, 242))
+		self.screen.blit(self.text7, (382, 475))
+		self.screen.blit(self.text7, (382, 580))
+		self.screen.blit(self.text7, (382, 657))
+		self.screen.blit(self.text7, (485, 242))
+		self.screen.blit(self.text7, (538, 293))
+		self.screen.blit(self.text7, (538, 372))
+		self.screen.blit(self.text7, (538, 658))
+		self.screen.blit(self.text7, (252, 658))
+		self.screen.blit(self.text7, (434, 293))
+		self.screen.blit(self.text7, (330, 320))
+		self.screen.blit(self.text7, (460, 423))
+		self.screen.blit(self.text7, (305, 788))
+		self.screen.blit(self.text7, (512, 788))
 
 		# draw all player
 		count = 0
@@ -475,7 +512,7 @@ class Game:
 							# higher than 3 set player in rotterdam central to may start
 							if self.players[self.turn].state == "lock" and self.thrown > 3:
 								self.players[self.turn].rect.x = 278
-								self.players[self.turn].rect.y = 54
+								self.players[self.turn].rect.y = 34
 							self.Draw()
 						print("has thrown:" + str(self.thrown))
 
@@ -498,12 +535,12 @@ class Game:
 			#pygame.display.flip()
 
 
-p1 = Player("A",(255,0,0),200,28)
-p2 = Player("B",(0,255,0),226,28)
-p3 = Player("C",(0,0,255),252,28)
-p4 = Player("D",(116,59,124),278,28)
-p5 = Player("E",(237,65,56),304,28)
-p6 = Player("F",(0,0,0),330,28)
+p1 = Player("A",(224,60,31),200,8)
+p2 = Player("B",(16,209,84),226,8)
+p3 = Player("C",(16,112,209),252,8)
+p4 = Player("D",(140,99,170),278,8)
+p5 = Player("E",(234,184,46),304,8)
+p6 = Player("F",(170,170,170),330,8)
 
 players = [p1,p2]
 
