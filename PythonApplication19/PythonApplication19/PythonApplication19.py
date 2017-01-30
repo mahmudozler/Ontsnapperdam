@@ -26,7 +26,7 @@ class Player:
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
 
-	def Update(self,screen,event,blocks,battleblocks,landmarks,thrown):
+	def Update(self,screen,event,blocks,battleblocks,landmarks,supriseblocks,thrown):
 		if event.type == pygame.KEYDOWN:
 			# to check the new position is within the game blocks
 			newpos = self.rect.copy()
@@ -67,15 +67,20 @@ class Player:
 						print("endblock!")
 						self.state = "end"
 						self.steps = thrown
-					else:
-						print("get more points!")
-
+				
 
 					#check if player in battleblock
 					for rectangle in battleblocks:
 						if newpos.colliderect(rectangle):
 							print("LETS BATTLE!")
 							break # stop check when battle block match
+
+					#chek if player in supriseblocks
+					for rectangle in supriseblocks:
+						if newpos.colliderect(rectangle):
+							print("SUPRISEEEE!!")
+							break # stop check when battle block match
+
 
 					#block check if player in landmark block
 					for rectangle in landmarks:
@@ -235,6 +240,7 @@ class Game:
 		self.blocks = []
 		self.battleblocks = []
 		self.landmarkblocks = []
+		self.supriseblocks = []
 
 		self.map_list = [[0,1,2,3,4,5,6,7,8,12,13,14,15,16,17,18,19],[0,9,19],[0,9,10,19],[0,10,19],[0,10,19],
 					[0,1,2,4,5,6,7,8,9,10,11,12,13,19],[0,2,4,8,13,17,18,19],[0,2,3,4,8,13,17,19],[0,4,8,11,12,13,14,15,16,17,19],[0,4,8,11,19],
@@ -244,7 +250,7 @@ class Game:
 		self.battle_map_list= [[],[],[],[0],[0],[0,1],[0],[13,17],[8,13,14,15,16,17],[8],[7,8],[],[13,14],[3,4,5,6,13],
 			[3,6,13],[13],[13],[13,14],[],[],[],[],[],[],[],[3,4,5,6],[3,13],[13],[13],[11,12,13]]
 		self.landmark_maplist = [[],[],[19],[],[],[2],[17],[],[],[11],[5],[],[0,16],[],[8],[],[],[8,15],[],[19],[],[4],[],[15],[11],[0],[],[3,8],[],[16]]
-		self.suprise_cards = [[4,15],[],[11],[],[],[1,7,13],[],[3],[14,18],[],[7,16,20],[11],[],[4,20],[12],[17],[7],[14],[1],[],[12],[7,14],[],[],[9,14,20],[4],[],[],[],[4,11,19]]
+		self.suprise_cards = [[3,14],[],[10],[],[],[0,6,12],[],[2],[13,17],[],[6,15,19],[11],[],[3,19],[11],[16],[6],[13],[0],[],[11],[6,13],[],[],[8,13,19],[3],[],[],[],[3,10,18]]
 		# Create list with all block position in the game
 		
 		for row in range(30):
@@ -261,6 +267,11 @@ class Game:
 					#create list with all landmark block positions
 					if self.Filter(col, row,self.landmark_maplist):
 						self.landmarkblocks.append(
+							pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
+										self.w, self.h))
+
+					if self.Filter(col, row,self.suprise_cards):
+						self.supriseblocks.append(
 							pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
 										self.w, self.h))
 
@@ -304,7 +315,7 @@ class Game:
 			player.state = "start"
 
 			if event.type == pygame.KEYDOWN:
-				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks, self.thrown)
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks,self.supriseblocks, self.thrown)
 
 				# if all steps made reset dice throw and set turn to next player
 				if player.steps == self.thrown:
@@ -318,7 +329,7 @@ class Game:
 		# player throw regular process after start
 		else:
 			if event.type == pygame.KEYDOWN:
-				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks, self.thrown)
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks,self.supriseblocks, self.thrown)
 
 				# if all steps made reset dice throw and set turn to next player
 				if player.steps == self.thrown:
@@ -552,8 +563,8 @@ class Game:
 
 							# if first turn 4 or higher set player in rotterdam central to start
 							if self.players[self.turn].state == "lock" and self.thrown > 3:
-								self.players[self.turn].rect.x = 147  #147 #278
-								self.players[self.turn].rect.y = 787 #787 #34
+								self.players[self.turn].rect.x = 278 #147 #278
+								self.players[self.turn].rect.y = 34 #787 #34
 							self.Draw()
 
 							# if player on endblock and throw 5 or more
@@ -603,7 +614,7 @@ players = [p1,p2]
 game = Game(players)
 print(game.landmarks[0])
 
-for x in game.blocks:
+for x in game.supriseblocks:
 	print(x)
 
 
