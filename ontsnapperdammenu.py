@@ -102,11 +102,13 @@ class start:
 
 
 menu = start()
+
 termination = Terminate_screen.Termination()
 how = howtoplay.mainloop()
 sett = setting.Settings()
-#highscores = PythonApplication25.hsscreen()
 menu.intro()
+#highscores = PythonApplication25.hsscreen()
+
 
 
 
