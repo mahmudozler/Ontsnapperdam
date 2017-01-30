@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import random
+import copy
 pygame.font.init()
 
 pygame.init()
@@ -16,14 +17,16 @@ class Player:
 		self.r = 10
 		self.rect = pygame.Rect(self.x, self.y, 20, 20)
 		self.steps = 0
-		self.startblock = pygame.Rect(249, 51, 103, 25)
+		self.startblock = pygame.Rect(249, 34, 103, 25)
+		self.endblock = pygame.Rect(119, 759, 25, 25)
 		self.quests = []
 		self.state = "lock"
+		self.questpoints = 0 #0
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
 
-	def Update(self,screen,event,blocks,battleblocks,landmarkblocks):
+	def Update(self,screen,event,blocks,battleblocks,landmarks,thrown):
 		if event.type == pygame.KEYDOWN:
 			# to check the new position is within the game blocks
 			newpos = self.rect.copy()
@@ -51,35 +54,45 @@ class Player:
 			# bool check is newpos is inside game rectangles
 			for rectangle in blocks:
 				if newpos.colliderect(rectangle):
-					#print(newpos)
+					print(newpos)
 
-					# convert newpos in the new position
+					#count steps
 					if event.key == K_LEFT or event.key == K_RIGHT or event.key == K_UP or event.key == K_DOWN:
 						self.steps += 1
+
+					# convert newpos in the new position
 					self.rect = newpos
+
+					#check if on end block and player has 3 quest points
+					if newpos.colliderect(self.endblock) and self.questpoints >= 3:
+						print("endblock!")
+						self.state = "end"
+						self.steps = thrown
+					else:
+						print("get more points!")
+
+
+					#check if player in battleblock
 					for rectangle in battleblocks:
 						if newpos.colliderect(rectangle):
 							print("LETS BATTLE!")
 							break # stop check when battle block match
 
-					for rectangle in landmarkblocks:
+					#block check if player in landmark block
+					for rectangle in landmarks:
 						if newpos.colliderect(rectangle[2]):
-							print("LANDMARK")
+							print("LANDMARK HIT")
 							count = 0
 							for quest in self.quests:
-								if newpos in quest:
-									print("one quest done")
-									#self.quest[1] = 1
-								#print("#")
+								if newpos.colliderect(quest[2]):
+									self.questpoints += 1
+									self.quests[count][1] = 1
+									print(self.questpoints)
+									break
+								else:
+									count += 1
+									print("no check")
 
-
-
-							break  # stop check when battle block match
-
-					"""for rectangle in landmarkblocks:
-						if newpos.colliderect(rectangle):
-							print("LANDMARK")
-							break  # stop check when battle block match"""
 
 					# stop check when matched
 					break
@@ -99,16 +112,10 @@ class Game:
 		self.landmark_namelist = [["hilton hotel",0],["de doelen",0],["luxor theater",0],["bijenkorf",0],["kfc",0],["coffeeshop amigo",0],["abn amro",0],["janzen huizen",0],["kabouter buttplug",0],
 		["wok to go",0],["hogeschool rotterdam",0],["kfc binnenweg",0],["inntel hotel",0],["museumpark orientalis",0],["erasmus mc",0],["amazing oriental",0],["euromast",0],["kunsthall rotterdam",0]]
 
-		#generate 3 unique quests or every player
-		for player in self.players:
-			count = 0
-			while count < 3:
-				new_landmark = random.choice(self.landmark_namelist)
-				if new_landmark not in player.quests:
-					player.quests.append(new_landmark)
-					count += 1
-
 		# Load game pic locations
+		self.dice_img = pygame.image.load('img/dice_throw.png')
+		self.check_img = pygame.transform.smoothscale(pygame.image.load('img/check.png'),(13,13))
+
 		self.img = pygame.image.load('img/soldier.png')
 		self.img = pygame.transform.smoothscale(self.img,(30,20 ))
 
@@ -137,7 +144,7 @@ class Game:
 		self.img9 = pygame.transform.smoothscale(self.img9,(80,80 ))
 
 		self.img10 = pygame.image.load('img/abn.png')
-		self.img10 = pygame.transform.smoothscale(self.img10,(70,85 ))
+		self.img10 = pygame.transform.smoothscale(self.img10,(50,37 ))
 
 		self.img11 = pygame.image.load('img/house.png')
 		self.img11 = pygame.transform.smoothscale(self.img11,(40,40 ))
@@ -222,6 +229,8 @@ class Game:
 		self.red = (191,36,36)
 		self.black = (23,20,20)
 		self.white = (255,255,255)
+		self.grey = (133,133,133)
+		self.darkgreen = (22,117,35)
 
 		#self.screen = pygame.display.set_mode(self.size)
 		self.blocks = []
@@ -235,32 +244,43 @@ class Game:
 					[0,6,15,19],[0,6,7,8,9,10,11,12,13,14,15,19],[0,1,2,3,4,5,6,8,15,19],[3,8,13,14,15,19],[3,8,13,19],[3,8,13,19],[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]]
 		self.battle_map_list= [[],[],[],[0],[0],[0,1],[0],[13,17],[8,13,14,15,16,17],[8],[7,8],[],[13,14],[3,4,5,6,13],
 			[3,6,13],[13],[13],[13,14],[],[],[],[],[],[],[],[3,4,5,6],[3,13],[13],[13],[11,12,13]]
-		self.landmark_maplist = [[],[],[19],[],[],[3],[17],[],[],[11],[5],[],[0,16],[],[8],[],[],[8,15],[],[19],[],[4],[],[15],[11],[0],[],[3,8],[],[16]]
-
+		self.landmark_maplist = [[],[],[19],[],[],[2],[17],[],[],[11],[5],[],[0,16],[],[8],[],[],[8,15],[],[19],[],[4],[],[15],[11],[0],[],[3,8],[],[16]]
+		self.suprise_cards = [[4,15],[],[11],[],[],[1,7,13],[],[3],[14,18],[],[7,16,20],[11],[],[4,20],[12],[17],[7],[14],[1],[],[12],[7,14],[],[],[9,14,20],[4],[],[],[],[4,11,19]]
 		# Create list with all block position in the game
+		
 		for row in range(30):
 			for col in range(30):
 				if self.Filter(col, row,self.battle_map_list):
 					self.battleblocks.append(
-						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50),
+						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
 									self.w, self.h))
 				elif self.Filter(col, row,self.map_list):
 					self.blocks.append(
-						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50),
+						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
 									self.w, self.h))
 
 					#create list with all landmark block positions
 					if self.Filter(col, row,self.landmark_maplist):
 						self.landmarkblocks.append(
-							pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 50),
+							pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
 										self.w, self.h))
 
 		# Create complete landmark list( name + cordinates + visit check)
 		count = 0
-		for l in range(17):
+		for l in range(18):
 			self.landmarks.append(self.landmark_namelist[count])
 			self.landmarks[count].append(self.landmarkblocks[count])
 			count += 1
+
+		# generate 3 unique quests or every player
+		for player in self.players:
+			count = 0
+			while count < 3:
+				new_landmark = random.choice(self.landmarks)
+				if new_landmark not in player.quests:
+					player.quests.append(
+						copy.deepcopy(new_landmark))  # copy.deepcopy to not change the original list!!!!!
+					count += 1
 
 		# special blocks
 		self.startblock = self.blocks[8]
@@ -270,17 +290,22 @@ class Game:
 
 	def Update(self, event):
 		player = self.players[self.turn]
-		#print(event.type)
+
+		# if player throws less than 4 in first turn don't let players make steps
 		if self.thrown < 4 and player.state == "lock":
+			return
+		elif self.thrown < 6 and player.state == "end":
 			return
 
 		self.Draw()
+
+
 		# if player throws 4 or more at start, let player in gameboard
 		if self.thrown >= 4 and player.state == "lock":
 			player.state = "start"
 
 			if event.type == pygame.KEYDOWN:
-				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks)
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks, self.thrown)
 
 				# if all steps made reset dice throw and set turn to next player
 				if player.steps == self.thrown:
@@ -291,11 +316,12 @@ class Game:
 						self.turn += 1
 					player.steps = 0
 
+		# player throw regular process after start
 		else:
 			if event.type == pygame.KEYDOWN:
-				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks)
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks, self.thrown)
 
-				# if all steps made
+				# if all steps made reset dice throw and set turn to next player
 				if player.steps == self.thrown:
 					self.thrown = 0
 					if self.turn == (len(self.players) - 1):
@@ -309,11 +335,36 @@ class Game:
 			return True
 		return False
 
+	def Questbar(self):
+		# display quests block
+		pygame.draw.rect(self.screen, (227, 227, 227), (600, 180, 200, 170))
+		self.screen.blit(self.info_font.render(
+			"Player {0} - Quests({1}/3)".format((self.turn + 1), self.players[self.turn].questpoints), True,
+			self.black), (620, 190))
+		count = 0
+		for quest in self.players[self.turn].quests:
+			self.screen.blit(self.info_font.render("- {}".format(quest[0]), True, self.black),
+							 (620, 220 + (40 * count)))
+			# Display text if quest is done or not done
+			if quest[1] == 0:
+				self.screen.blit(self.info_font.render("not done yet", True, self.grey), (630, 235 + (40 * count)))
+			else:
+				self.screen.blit(self.info_font.render("done!", True, self.darkgreen), (630, 235 + (40 * count)))
+				self.screen.blit(self.check_img, (667, 235 + (40 * count)))
+			count += 1
+
 	def Draw(self):
 
 		#draw canvas
 		self.screen = pygame.display.set_mode(self.size,RESIZABLE)
-		self.screen.fill((255, 255, 255))
+		self.screen.fill((250, 250, 250))
+
+		# draw game board
+		for rectangle in self.blocks:
+			pygame.draw.rect(self.screen, self.grey, rectangle,1)
+
+		for rectangle in self.battleblocks:
+			pygame.draw.rect(self.screen, self.red, rectangle, 1)
 
 		# if dice is thrown
 		if self.thrown > 0:
@@ -326,122 +377,149 @@ class Game:
 				self.screen.blit(self.info_font.render("you need to throw 4 or more".format(self.turn), True,self.black), (600, 145))
 				self.screen.blit(self.info_font.render("to enter Rotterdam centraal!".format(self.turn), True, self.black),(600, 160))
 				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 190))
-			else:
-				self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
-				self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
 
-		# if dice is not thrown yet
+			#if player on endblock show text to throw 5 or more to enter ship and win
+			elif self.thrown < 5 and self.players[self.turn].state == "end":
+				self.screen.blit(self.info_font.render("you need to throw 5 to enter ship!".format(self.turn), True, self.black),(600, 130))
+				self.screen.blit(self.info_font.render("Press 'Enter' to end turn", True, self.black), (600, 150))
+
+				# display quests block
+				self.Questbar()
+
+			else:
+				if self.players[self.turn].state == "end" and self.thrown >= 5:
+					self.screen.blit(self.info_font.render("You have entered the ship :)", True, self.black),(600, 130))
+				else:
+					self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
+					self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
+
+				# display quests block
+				self.Questbar()
+
+
+		# if dice is not thrown yet-----------------------
 		else:
+			self.screen.blit(pygame.transform.smoothscale(self.dice_img,(50,50)),(610,60))
 			self.screen.blit(self.info_font.render("Player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 25))
 			self.screen.blit(self.info_font.render("throw the dice!", True, (10, 10, 10)),(655, 25))
+
+			# display quests block
+			self.Questbar()
+
+			# show text when players to throw 4 to get into game,
 			if self.players[self.turn].state == "lock":
 				self.screen.blit(self.info_font.render("Throw 4 or more to get",1,self.black),(600,130))
 				self.screen.blit(self.info_font.render("on Rotterdam Centraal!", 1, self.black),(600, 145))
+			# show text when players need to throw 5 to enter ship
+			elif self.thrown < 6 and self.players[self.turn].state == "end":
+				self.screen.blit(
+					self.info_font.render("you need to throw 5 to enter ship!".format(self.turn), True, self.black),(600, 130))
+
+		# if player completed all quests and has 3 questpoints
+		if self.players[self.turn].questpoints >= 3:
+			pygame.draw.rect(self.screen, (227, 227, 227), (600, 370, 200, 100))
+			self.screen.blit(self.info_font.render("You have 3 questspoints!", True, self.black), (620, 390))
+			self.screen.blit(self.info_font.render("Now hurry to the boat", True, self.black), (620, 410))
+			self.screen.blit(self.info_font.render("entrance to escape!", True, self.black), (620, 430))
+
 
 		#draw dice button
 		pygame.draw.rect(self.screen, (0, 0, 0), (600, 50, 70, 70), 1)
 
 		# paste all images
-		self.screen.blit(self.img, (510, 420))
-		self.screen.blit(self.img2, (500, 100))
-		self.screen.blit(self.img3, (77, 130))
-		self.screen.blit(self.img4, (378, 179))
-		self.screen.blit(self.img4, (144, 257))
-		self.screen.blit(self.img4, (534, 413))
-		self.screen.blit(self.img5, (42, 235))
-		self.screen.blit(self.img6, (250, 258))
-		self.screen.blit(self.img7, (435, 195))
-		self.screen.blit(self.img8, (170, 282))
-		self.screen.blit(self.img9, (353, 260))
-		self.screen.blit(self.img10, (473, 330))
-		self.screen.blit(self.img11, (235, 374))
-		self.screen.blit(self.img12, (65, 360))
-		self.screen.blit(self.img13, (70, 445))
-		self.screen.blit(self.img14, (240, 438))
-		self.screen.blit(self.img4, (274, 491))
-		self.screen.blit(self.img15, (379, 440))
-		self.screen.blit(self.img16, (415, 470))
-		self.screen.blit(self.img17, (505, 542))
-		self.screen.blit(self.img18, (276, 571))
-		self.screen.blit(self.img8, (130, 570))
-		self.screen.blit(self.img19, (70, 650))
-		self.screen.blit(self.img20, (296, 645))
-		self.screen.blit(self.img20, (324, 645))
-		self.screen.blit(self.img20, (352, 645))
-		self.screen.blit(self.img21, (458, 647))
-		self.screen.blit(self.img4, (92, 518))
-		self.screen.blit(self.img22, (458, 750))
-		self.screen.blit(self.img4, (430, 725))
-		self.screen.blit(self.img23, (250, 740))
-		self.screen.blit(self.img24, (200, 703))
-		self.screen.blit(self.img25, (145, 755))
-		self.screen.blit(self.img26, (118, 778))
-		self.screen.blit(self.img27, (10, 720))
-		self.screen.blit(self.img28, (329, 808))
+		self.screen.blit(self.img, (510, 400))
+		self.screen.blit(self.img2, (500, 80))
+		self.screen.blit(self.img3, (77, 110))
+		self.screen.blit(self.img4, (378, 159))
+		self.screen.blit(self.img4, (144, 237))
+		self.screen.blit(self.img4, (534, 393))
+		self.screen.blit(self.img5, (42, 215))
+		self.screen.blit(self.img6, (250, 238))
+		self.screen.blit(self.img7, (435, 175))
+		self.screen.blit(self.img8, (170, 262))
+		self.screen.blit(self.img9, (353, 240))
+		self.screen.blit(self.img10, (483, 340))
+		self.screen.blit(self.img11, (235, 354))
+		self.screen.blit(self.img12, (65, 340))
+		self.screen.blit(self.img13, (70, 425))
+		self.screen.blit(self.img14, (240, 418))
+		self.screen.blit(self.img4, (274, 471))
+		self.screen.blit(self.img15, (379, 420))
+		self.screen.blit(self.img16, (415, 450))
+		self.screen.blit(self.img17, (505, 522))
+		self.screen.blit(self.img18, (276, 551))
+		self.screen.blit(self.img8, (130, 550))
+		self.screen.blit(self.img19, (70, 630))
+		self.screen.blit(self.img20, (296, 625))
+		self.screen.blit(self.img20, (324, 625))
+		self.screen.blit(self.img20, (352, 625))
+		self.screen.blit(self.img21, (458, 627))
+		self.screen.blit(self.img4, (92, 498))
+		self.screen.blit(self.img22, (458, 730))
+		self.screen.blit(self.img4, (430, 705))
+		self.screen.blit(self.img23, (250, 720))
+		self.screen.blit(self.img24, (200, 683))
+		self.screen.blit(self.img25, (145, 735))
+		self.screen.blit(self.img26, (118, 758))
+		self.screen.blit(self.img27, (10, 700))
+		self.screen.blit(self.img28, (329, 788))
 
 		# text map
-		self.screen.blit(self.text, (254, 57))
-		self.screen.blit(self.text2, (67, 350))
-		self.screen.blit(self.text3, (240, 365))
-		self.screen.blit(self.text4, (240, 440))
-		self.screen.blit(self.text5, (308, 630))
-		self.screen.blit(self.text6, (300, 760))
+		self.screen.blit(self.text, (254, 37))
+		self.screen.blit(self.text2, (67, 330))
+		self.screen.blit(self.text3, (240, 345))
+		self.screen.blit(self.text4, (240, 420))
+		self.screen.blit(self.text5, (308, 610))
+		self.screen.blit(self.text6, (300, 740))
 
 		# L
-		self.screen.blit(self.text1, (542, 107))
-		self.screen.blit(self.text1, (542, 550))
-		self.screen.blit(self.text1, (490, 212))
-		self.screen.blit(self.text1, (463, 367))
-		self.screen.blit(self.text1, (437, 497))
-		self.screen.blit(self.text1, (437, 653))
-		self.screen.blit(self.text1, (463, 810))
-		self.screen.blit(self.text1, (100, 185))
-		self.screen.blit(self.text1, (177, 315))
-		self.screen.blit(self.text1, (47, 367))
-		self.screen.blit(self.text1, (333, 289))
-		self.screen.blit(self.text1, (255, 419))
-		self.screen.blit(self.text1, (255, 498))
-		self.screen.blit(self.text1, (333, 679))
-		self.screen.blit(self.text1, (255, 757))
-		self.screen.blit(self.text1, (125, 757))
-		self.screen.blit(self.text1, (150, 600))
-		self.screen.blit(self.text1, (48, 705))
+		self.screen.blit(self.text1, (542, 87))
+		self.screen.blit(self.text1, (542, 530))
+		self.screen.blit(self.text1, (490, 192))
+		self.screen.blit(self.text1, (463, 347))
+		self.screen.blit(self.text1, (437, 477))
+		self.screen.blit(self.text1, (437, 633))
+		self.screen.blit(self.text1, (463, 790))
+		self.screen.blit(self.text1, (100, 165))
+		self.screen.blit(self.text1, (177, 295))
+		self.screen.blit(self.text1, (47, 347))
+		self.screen.blit(self.text1, (333, 269))
+		self.screen.blit(self.text1, (255, 399))
+		self.screen.blit(self.text1, (255, 478))
+		self.screen.blit(self.text1, (333, 659))
+		self.screen.blit(self.text1, (255, 737))
+		self.screen.blit(self.text1, (125, 737))
+		self.screen.blit(self.text1, (150, 580))
+		self.screen.blit(self.text1, (48, 685))
 		# !?
-		self.screen.blit(self.text7, (121, 54))
-		self.screen.blit(self.text7, (408, 54))
-		self.screen.blit(self.text7, (305, 105))
-		self.screen.blit(self.text7, (356, 184))
-		self.screen.blit(self.text7, (200, 184))
-		self.screen.blit(self.text7, (200, 313))
-		self.screen.blit(self.text7, (200, 470))
-		self.screen.blit(self.text7, (200, 600))
-		self.screen.blit(self.text7, (44, 184))
-		self.screen.blit(self.text7, (95, 235))
-		self.screen.blit(self.text7, (122, 391))
-		self.screen.blit(self.text7, (122, 704))
-		self.screen.blit(self.text7, (122, 808))
-		self.screen.blit(self.text7, (44, 522))
-		self.screen.blit(self.text7, (382, 262))
-		self.screen.blit(self.text7, (382, 495))
-		self.screen.blit(self.text7, (382, 600))
-		self.screen.blit(self.text7, (382, 677))
-		self.screen.blit(self.text7, (485, 262))
-		self.screen.blit(self.text7, (538, 313))
-		self.screen.blit(self.text7, (538, 392))
-		self.screen.blit(self.text7, (538, 678))
-		self.screen.blit(self.text7, (252, 678))
-		self.screen.blit(self.text7, (434, 313))
-		self.screen.blit(self.text7, (330, 340))
-		self.screen.blit(self.text7, (460, 443))
-		self.screen.blit(self.text7, (305, 808))
-		self.screen.blit(self.text7, (512, 808))
-
-		# draw game board
-		for rectangle in self.blocks:
-			pygame.draw.rect(self.screen, self.black, rectangle, 1)
-
-		for rectangle in self.battleblocks:
-			pygame.draw.rect(self.screen, self.red, rectangle, 1)
+		self.screen.blit(self.text7, (121, 34))
+		self.screen.blit(self.text7, (408, 34))
+		self.screen.blit(self.text7, (305, 85))
+		self.screen.blit(self.text7, (356, 164))
+		self.screen.blit(self.text7, (200, 164))
+		self.screen.blit(self.text7, (200, 293))
+		self.screen.blit(self.text7, (200, 450))
+		self.screen.blit(self.text7, (200, 580))
+		self.screen.blit(self.text7, (44, 164))
+		self.screen.blit(self.text7, (95, 215))
+		self.screen.blit(self.text7, (122, 371))
+		self.screen.blit(self.text7, (122, 684))
+		self.screen.blit(self.text7, (122, 788))
+		self.screen.blit(self.text7, (44, 502))
+		self.screen.blit(self.text7, (382, 242))
+		self.screen.blit(self.text7, (382, 475))
+		self.screen.blit(self.text7, (382, 580))
+		self.screen.blit(self.text7, (382, 657))
+		self.screen.blit(self.text7, (485, 242))
+		self.screen.blit(self.text7, (538, 293))
+		self.screen.blit(self.text7, (538, 372))
+		self.screen.blit(self.text7, (538, 658))
+		self.screen.blit(self.text7, (252, 658))
+		self.screen.blit(self.text7, (434, 293))
+		self.screen.blit(self.text7, (330, 320))
+		self.screen.blit(self.text7, (460, 423))
+		self.screen.blit(self.text7, (305, 788))
+		self.screen.blit(self.text7, (512, 788))
 
 		# draw all player
 		count = 0
@@ -474,11 +552,18 @@ class Game:
 							if self.thrown < 4:
 								self.Update(event)
 
-							# higher than 3 set player in rotterdam central to may start
+							# if first turn 4 or higher set player in rotterdam central to start
 							if self.players[self.turn].state == "lock" and self.thrown > 3:
-								self.players[self.turn].rect.x = 278
-								self.players[self.turn].rect.y = 54
+								self.players[self.turn].rect.x = 278 #147 #278
+								self.players[self.turn].rect.y = 34 #787 #34
 							self.Draw()
+
+							# if player on endblock and throw 5 or more
+							if self.players[self.turn].state == "end" and self.thrown >= 5:
+								self.players[self.turn].rect.x = 80
+								self.players[self.turn].rect.y = 730
+							self.Draw()
+
 						print("has thrown:" + str(self.thrown))
 
 				# execute if dice is thrown
@@ -496,26 +581,34 @@ class Game:
 						else:
 							self.turn = 0
 						self.Draw()
+
+					elif event.key == K_RETURN and self.thrown > 0 and self.players[self.turn].state == "end":
+						self.thrown = 0
+						if self.turn < (len(self.players) - 1):
+							self.turn += 1
+						else:
+							self.turn = 0
+						self.Draw()
 			# ...
 			#pygame.display.flip()
 
 
-p1 = Player("A",(255,0,0),200,28)
-p2 = Player("B",(0,255,0),226,28)
-p3 = Player("C",(0,0,255),252,28)
-p4 = Player("D",(116,59,124),278,28)
-p5 = Player("E",(237,65,56),304,28)
-p6 = Player("F",(0,0,0),330,28)
+p1 = Player("A",(224,60,31),200,8)
+p2 = Player("B",(16,209,84),226,8)
+p3 = Player("C",(16,112,209),252,8)
+p4 = Player("D",(140,99,170),278,8)
+p5 = Player("E",(234,184,46),304,8)
+p6 = Player("F",(170,170,170),330,8)
 
 players = [p1,p2]
 
 game = Game(players)
 print(game.landmarks[0])
-#for x in game.landmarks:
-#	print(x)
 
-print(p1.quests)
-print(p2.quests)
+for x in game.blocks:
+	print(x)
+
+
 
 game.Gameloop()
 
