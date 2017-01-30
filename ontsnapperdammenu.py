@@ -7,6 +7,7 @@ import PythonApplication19
 from PythonApplication19 import *
 import Terminate_screen
 import howtoplay
+import setting
 #import PythonApplication25
 
 
@@ -19,14 +20,14 @@ img5 = pygame.image.load('img/howtoplay.png')
 img7 = pygame.image.load('img/highscores.png')
 bg = pygame.image.load('img/speelbord.png')
 ologo = pygame.image.load('img/ontsnapperdamlogo.png')
-setting = pygame.image.load('img/settings.png')
+settingimg = pygame.image.load('img/settings.png')
 img2 = pygame.transform.smoothscale(img,(200,70))
 img4 = pygame.transform.smoothscale(img3,(200,70))
 img6 = pygame.transform.smoothscale(img5,(200,70))
 img8 = pygame.transform.smoothscale(img7,(200,70))
 bg1 = pygame.transform.smoothscale(bg,(width,height))
 ologo1 = pygame.transform.smoothscale(ologo,(800,230))
-settings1 = pygame.transform.smoothscale(setting,(100,35))
+settings1 = pygame.transform.smoothscale(settingimg,(100,35))
 screen = pygame.display.set_mode((width,height))
 
 
@@ -41,7 +42,7 @@ screen = pygame.display.set_mode((width,height))
 black = (0,0,0)
 red = (255,0,0)
 white = (255,255,255)
-done = True
+
 
 
 pygame.display.set_caption('Ontsnapperdam')
@@ -88,12 +89,11 @@ class start:
                         #pygame.quit()
                         #quit()
                     elif width-100 <= mousex and width >= mousex and 15 <= mousey and 50 >= mousey:
-                        print("Settings")
+                        sett.loop()
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.55 <= mousey and height * 0.633 >= mousey:
                         #highscores.introo()
                         print("hoi")
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.65 <= mousey and height * 0.733 >= mousey:
-
                         how.loop()
 
 
@@ -102,10 +102,13 @@ class start:
 
 
 menu = start()
+
 termination = Terminate_screen.Termination()
 how = howtoplay.mainloop()
-#highscores = PythonApplication25.hsscreen()
+sett = setting.Settings()
 menu.intro()
+#highscores = PythonApplication25.hsscreen()
+
 
 
 

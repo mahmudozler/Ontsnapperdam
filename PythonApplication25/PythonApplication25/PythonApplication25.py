@@ -9,43 +9,43 @@ import psycopg2
 # Use the database
 def interact_with_database(command):
     # Connect and set up cursor
-    connection = psycopg2.connect("dbname=postgres user=postgres password='2450086'")
-    cursor = connection.cursor()
+	connection = psycopg2.connect("dbname=postgres user=postgres password='0'")
+	cursor = connection.cursor()
    
     # Execute the command
-    cursor.execute(command)
-    connection.commit()
+	cursor.execute(command)
+	connection.commit()
  
     # Save results
-    results = None
-    try:
-        results = cursor.fetchall()
-    except psycopg2.ProgrammingError:
+	results = None
+	try:
+		results = cursor.fetchall()
+	except psycopg2.ProgrammingError:
         # Nothing to fetch
-        pass
+		pass
  
     # Close connection
-    cursor.close()
-    connection.close()
+	cursor.close()
+	connection.close()
    
-    return results
+	return results
  
  
  
 # Uploads a score into the hiscore table
 def upload_score(name, score):
-    interact_with_database("UPDATE users SET score = {} WHERE name = '{}'")
+	interact_with_database("UPDATE users SET score = {} WHERE name = '{}'")
  
  
 # Downloads score data from database
 def download_scores():
-    return interact_with_database("SELECT * FROM users")
+	return interact_with_database("SELECT * FROM users")
  
  
 # Downloads the top score from database
 def download_top_score():
-    result = interact_with_database("SELECT * FROM users ORDER BY name")[0][1]
-    return result
+	result = interact_with_database("SELECT * FROM users ORDER BY name")[0][1]
+	return result
  
  
  
@@ -83,14 +83,14 @@ score = download_scores()
  
 #print table of users and score
 def table():
-    buffer=[]
-    for i in score:
-        x = "{} --> {}".format(i[0],i[1])
-        buffer.append(x)
+	buffer=[]
+	for i in score:
+		x = "{} --> {}".format(i[0],i[1])
+		buffer.append(x)
  
-    for x in buffer:
-        print(x)
-    return buffer
+	for x in buffer:
+		print(x)
+	return buffer
    
 list = table()
  
@@ -115,34 +115,36 @@ defaultfont = pygame.font.get_default_font()
 fontrenderer = pygame.font.Font(defaultfont,85)
  
 class hsscreen:
-    def __init__(self):
-        self.running = True
+	def __init__(self):
+		self.running = True
+		self.done = True
  
  
  
+	def introo(self):
  
-    def introo(self):
+		while self.running:
+			screen.blit(bg1,(0,0))
+			screen.blit(label3,(200,15))
+			screen.blit(img6,(50,730))
+			#screen.blit(list(50,80))
+			#list
+			count = 0
+			for s in list:
+				count += 1
+				screen.blit(font.render("{}".format(s),1,black),(250 ,(150 + (100 * count))))
  
-        while self.running:
-            screen.blit(bg1,(0,0))
-            screen.blit(label3,(200,15))
-            screen.blit(img6,(50,730))
- 
-            #list
-            count = 0
-            for s in list:
-                count += 1
-                screen.blit(font.render("{}".format(s),1,black),(250 ,(150 + (100 * count))))
- 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                    Game(players)
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    mousex, mousey = pygame.mouse.get_pos()
-                    if mousex > 50 and mousex < 150 and mousey > 700 and mousey < 800:
-                        self.running = False
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					self.running = False
+					Game(players)
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					mousex, mousey = pygame.mouse.get_pos()
+					if mousex > 50 and mousex < 150 and mousey > 700 and mousey < 800:
+						self.running = False
                        
  
-            pygame.display.flip()
+			pygame.display.flip()
  
+hs = hsscreen()
+hs.introo()

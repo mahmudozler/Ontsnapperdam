@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0a9a402a-2307-4fdc-9272-a4cbcbe2bf1c}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>howtoplay.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+    <InterpreterVersion />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="highscore screen.txt" />
+    <Content Include="img\aan.png" />
+    <Content Include="img\abn.png" />
+    <Content Include="img\back.png" />
+    <Content Include="img\back4.png" />
+    <Content Include="img\bijenkorf.png" />
+    <Content Include="img\bike.png" />
+    <Content Include="img\boat.jpg" />
+    <Content Include="img\boat.png" />
+    <Content Include="img\camuflage.png" />
+    <Content Include="img\check.png" />
+    <Content Include="img\dedoelen.png" />
+    <Content Include="img\dice_throw.png" />
+    <Content Include="img\erasmus.png" />
+    <Content Include="img\euromast.png" />
+    <Content Include="img\exit.png" />
+    <Content Include="img\fist.png" />
+    <Content Include="img\fusrodah.png" />
+    <Content Include="img\highscores.png" />
+    <Content Include="img\hilton.png" />
+    <Content Include="img\house.png" />
+    <Content Include="img\howtoplay.png" />
+    <Content Include="img\hro.png" />
+    <Content Include="img\inntel.png" />
+    <Content Include="img\kabouter.png" />
+    <Content Include="img\kfc.png" />
+    <Content Include="img\kunsthal.png" />
+    <Content Include="img\l.png" />
+    <Content Include="img\luxor.png" />
+    <Content Include="img\No.png" />
+    <Content Include="img\ontsnapperdamlogo.png" />
+    <Content Include="img\oriental.png" />
+    <Content Include="img\pijl.png" />
+    <Content Include="img\play.png" />
+    <Content Include="img\police.png" />
+    <Content Include="img\rules.png" />
+    <Content Include="img\settings.png" />
+    <Content Include="img\soldier.png" />
+    <Content Include="img\speelbord.png" />
+    <Content Include="img\taxi.png" />
+    <Content Include="img\time.png" />
+    <Content Include="img\tree.png" />
+    <Content Include="img\ufo.png" />
+    <Content Include="img\uit.png" />
+    <Content Include="img\weed.png" />
+    <Content Include="img\wok.png" />
+    <Content Include="img\Yes.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\abn.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\bijenkorf.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\bike.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\boat.jpg" />
+    <Content Include="PythonApplication19\PythonApplication19\img\boat.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\camuflage.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\check.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\dedoelen.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\dice_throw.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\erasmus.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\euromast.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\fist.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\fusrodah.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\hilton.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\house.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\hro.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\inntel.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\kabouter.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\kfc.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\kunsthal.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\l.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\luxor.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\oriental.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\pijl.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\police.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\soldier.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\taxi.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\time.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\tree.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\ufo.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\weed.png" />
+    <Content Include="PythonApplication19\PythonApplication19\img\wok.png" />
+    <Content Include="PythonApplication25\PythonApplication25\back.png" />
+    <Content Include="PythonApplication25\PythonApplication25\speelbord.png" />
+    <Content Include="terminate screen\kaart.png" />
+    <Content Include="terminate screen\kans.png" />
+    <Content Include="terminate screen\No.png" />
+    <Content Include="terminate screen\Yes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="howtoplay.py" />
+    <Compile Include="ontsnapperdammenu.py" />
+    <Compile Include="PythonApplication19.py" />
+    <Compile Include="PythonApplication19\PythonApplication19\PythonApplication19.py" />
+    <Compile Include="PythonApplication20\PythonApplication20\PythonApplication20.py" />
+    <Compile Include="PythonApplication25.py" />
+    <Compile Include="PythonApplication25\PythonApplication25\PythonApplication25.py" />
+    <Compile Include="setting.py" />
+    <Compile Include="settings.py" />
+    <Compile Include="suprise card functions\suprise card functions\suprise_card_functions.py" />
+    <Compile Include="terminate screen\kanskaartjes.py" />
+    <Compile Include="terminate screen\Terminate screen.py" />
+    <Compile Include="Terminate_screen.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="img" />
+    <Folder Include="PythonApplication19\" />
+    <Folder Include="PythonApplication19\PythonApplication19" />
+    <Folder Include="PythonApplication19\PythonApplication19\img" />
+    <Folder Include="PythonApplication20\" />
+    <Folder Include="PythonApplication20\PythonApplication20" />
+    <Folder Include="PythonApplication25\" />
+    <Folder Include="PythonApplication25\PythonApplication25" />
+    <Folder Include="suprise card functions\" />
+    <Folder Include="suprise card functions\suprise card functions" />
+    <Folder Include="terminate screen" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>
