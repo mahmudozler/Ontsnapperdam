@@ -73,7 +73,7 @@ class Player:
 					for rectangle in battleblocks:
 						if newpos.colliderect(rectangle):
 							print("LETS BATTLE!")
-							pygame.mixer.music.load('battlesound.mp3')
+							pygame.mixer.music.load('img/battlesound.mp3')
 							pygame.mixer.music.play(0)
 							break # stop check when battle block match
 
@@ -81,7 +81,7 @@ class Player:
 					for rectangle in supriseblocks:
 						if newpos.colliderect(rectangle):
 							print("SUPRISEEEE!!")
-							pygame.mixer.music.load('questionsound.mp3')
+							pygame.mixer.music.load('img/questionsound.mp3')
 							pygame.mixer.music.play(0)
 							break # stop check when battle block match
 				
@@ -96,7 +96,7 @@ class Player:
 					for rectangle in landmarks:
 						if newpos.colliderect(rectangle[2]):
 							print("LANDMARK HIT")
-							pygame.mixer.music.load('locationsound.mp3')
+							pygame.mixer.music.load('img/locationsound.mp3')
 							pygame.mixer.music.play(0)
 							count = 0
 							for quest in self.quests:

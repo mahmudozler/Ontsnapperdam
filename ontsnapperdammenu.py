@@ -29,7 +29,7 @@ bg1 = pygame.transform.smoothscale(bg,(width,height))
 ologo1 = pygame.transform.smoothscale(ologo,(800,230))
 settings1 = pygame.transform.smoothscale(settingimg,(100,35))
 screen = pygame.display.set_mode((width,height))
-pygame.mixer.music.load('song.mp3')
+
 
  #Main Loop
 # p1 = PythonApplication19.Player("F",(0,0,0),330,20)

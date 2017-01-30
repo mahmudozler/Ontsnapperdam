@@ -17,7 +17,7 @@ defaultfont = pygame.font.get_default_font()
 fontrenderer = pygame.font.Font(defaultfont,85)
 screen.fill((255,255,255))
 label = fontrenderer.render("Settings",1,(0,0,0))
-pygame.mixer.music.load('song.mp3')
+pygame.mixer.music.load('img/song.mp3')
 pygame.mixer.music.play(-1)
 
 class Settings:
