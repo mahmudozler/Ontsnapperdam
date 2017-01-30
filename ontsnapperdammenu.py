@@ -7,6 +7,7 @@ import PythonApplication19
 from PythonApplication19 import *
 import Terminate_screen
 import howtoplay
+import setting
 #import PythonApplication25
 
 
@@ -88,7 +89,7 @@ class start:
                         #pygame.quit()
                         #quit()
                     elif width-100 <= mousex and width >= mousex and 15 <= mousey and 50 >= mousey:
-                        print("Settings")
+                        sett.loop()
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.55 <= mousey and height * 0.633 >= mousey:
                         #highscores.introo()
                         print("hoi")
@@ -104,6 +105,7 @@ class start:
 menu = start()
 termination = Terminate_screen.Termination()
 how = howtoplay.mainloop()
+sett = setting.Settings()
 #highscores = PythonApplication25.hsscreen()
 menu.intro()
 
