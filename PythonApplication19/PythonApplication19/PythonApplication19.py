@@ -21,7 +21,7 @@ class Player:
 		self.endblock = pygame.Rect(119, 759, 25, 25)
 		self.quests = []
 		self.state = "lock"
-		self.questpoints = 0 #0
+		self.questpoints = 3 #0
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
@@ -33,7 +33,6 @@ class Player:
 
 			# If player on start block these sizes these steps else normal size steps
 			if newpos.colliderect(self.startblock):
-				#print("STARTBLOCK")
 				self.state = "-"
 				if event.key == pygame.K_LEFT:
 					newpos.x -= 52
@@ -123,7 +122,7 @@ class Game:
 		self.img2 = pygame.transform.smoothscale(self.img2,(35,32 ))
 
 		self.img3 = pygame.image.load('img/dedoelen.png')
-		self.img3 = pygame.transform.smoothscale(self.img3,(60,60 ))
+		self.img3 = pygame.transform.smoothscale(self.img3,(75,60 ))
 
 		self.img4 = pygame.image.load('img/police.png')
 		self.img4 = pygame.transform.smoothscale(self.img4,(27,27 ))
@@ -189,13 +188,13 @@ class Game:
 		self.img24= pygame.transform.smoothscale(self.img24,(20,20 ))
 
 		self.img25 = pygame.image.load('img/oriental.png')
-		self.img25= pygame.transform.smoothscale(self.img25,(55,25 ))
+		self.img25= pygame.transform.smoothscale(self.img25,(75,25 ))
 
 		self.img26 = pygame.image.load('img/pijl.png')
 		self.img26= pygame.transform.smoothscale(self.img26,(30,30 ))
 
 		self.img27 = pygame.image.load('img/boat.png')
-		self.img27= pygame.transform.smoothscale(self.img27,(110,110 ))
+		self.img27= pygame.transform.smoothscale(self.img27,(110,100 ))
 
 		self.img28 = pygame.image.load('img/fist.png')
 		self.img28= pygame.transform.smoothscale(self.img28,(20,20 ))
@@ -338,13 +337,10 @@ class Game:
 	def Questbar(self):
 		# display quests block
 		pygame.draw.rect(self.screen, (227, 227, 227), (600, 180, 200, 170))
-		self.screen.blit(self.info_font.render(
-			"Player {0} - Quests({1}/3)".format((self.turn + 1), self.players[self.turn].questpoints), True,
-			self.black), (620, 190))
+		self.screen.blit(self.info_font.render("Player {0} - Quests({1}/3)".format((self.turn + 1), self.players[self.turn].questpoints), True,self.black), (620, 190))
 		count = 0
 		for quest in self.players[self.turn].quests:
-			self.screen.blit(self.info_font.render("- {}".format(quest[0]), True, self.black),
-							 (620, 220 + (40 * count)))
+			self.screen.blit(self.info_font.render("- {}".format(quest[0]), True, self.black),(620, 220 + (40 * count)))
 			# Display text if quest is done or not done
 			if quest[1] == 0:
 				self.screen.blit(self.info_font.render("not done yet", True, self.grey), (630, 235 + (40 * count)))
@@ -366,70 +362,13 @@ class Game:
 		for rectangle in self.battleblocks:
 			pygame.draw.rect(self.screen, self.red, rectangle, 1)
 
-		# if dice is thrown
-		if self.thrown > 0:
-
-			#text handles
-			self.screen.blit(self.dice_font.render("{0}".format(self.thrown), True, self.black), (625, 70))
-			self.screen.blit(self.info_font.render("You have thrown:", True, self.black), (600, 30))
-			if self.thrown < 4 and self.players[self.turn].state == "lock":
-				self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True,self.players[self.turn].kleur), (600, 130))
-				self.screen.blit(self.info_font.render("you need to throw 4 or more".format(self.turn), True,self.black), (600, 145))
-				self.screen.blit(self.info_font.render("to enter Rotterdam centraal!".format(self.turn), True, self.black),(600, 160))
-				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 190))
-
-			#if player on endblock show text to throw 5 or more to enter ship and win
-			elif self.thrown < 5 and self.players[self.turn].state == "end":
-				self.screen.blit(self.info_font.render("you need to throw 5 to enter ship!".format(self.turn), True, self.black),(600, 130))
-				self.screen.blit(self.info_font.render("Press 'Enter' to end turn", True, self.black), (600, 150))
-
-				# display quests block
-				self.Questbar()
-
-			else:
-				if self.players[self.turn].state == "end" and self.thrown >= 5:
-					self.screen.blit(self.info_font.render("You have entered the ship :)", True, self.black),(600, 130))
-				else:
-					self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
-					self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
-
-				# display quests block
-				self.Questbar()
-
-
-		# if dice is not thrown yet-----------------------
-		else:
-			self.screen.blit(pygame.transform.smoothscale(self.dice_img,(50,50)),(610,60))
-			self.screen.blit(self.info_font.render("Player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 25))
-			self.screen.blit(self.info_font.render("throw the dice!", True, (10, 10, 10)),(655, 25))
-
-			# display quests block
-			self.Questbar()
-
-			# show text when players to throw 4 to get into game,
-			if self.players[self.turn].state == "lock":
-				self.screen.blit(self.info_font.render("Throw 4 or more to get",1,self.black),(600,130))
-				self.screen.blit(self.info_font.render("on Rotterdam Centraal!", 1, self.black),(600, 145))
-			# show text when players need to throw 5 to enter ship
-			elif self.thrown < 6 and self.players[self.turn].state == "end":
-				self.screen.blit(
-					self.info_font.render("you need to throw 5 to enter ship!".format(self.turn), True, self.black),(600, 130))
-
-		# if player completed all quests and has 3 questpoints
-		if self.players[self.turn].questpoints >= 3:
-			pygame.draw.rect(self.screen, (227, 227, 227), (600, 370, 200, 100))
-			self.screen.blit(self.info_font.render("You have 3 questspoints!", True, self.black), (620, 390))
-			self.screen.blit(self.info_font.render("Now hurry to the boat", True, self.black), (620, 410))
-			self.screen.blit(self.info_font.render("entrance to escape!", True, self.black), (620, 430))
-
-
-		#draw dice button
+		# draw dice button
 		pygame.draw.rect(self.screen, (0, 0, 0), (600, 50, 70, 70), 1)
 
 		# paste all images
 		self.screen.blit(self.img, (510, 400))
 		self.screen.blit(self.img2, (500, 80))
-		self.screen.blit(self.img3, (77, 110))
+		self.screen.blit(self.img3, (70, 110))
 		self.screen.blit(self.img4, (378, 159))
 		self.screen.blit(self.img4, (144, 237))
 		self.screen.blit(self.img4, (534, 393))
@@ -461,14 +400,14 @@ class Game:
 		self.screen.blit(self.img24, (200, 683))
 		self.screen.blit(self.img25, (145, 735))
 		self.screen.blit(self.img26, (118, 758))
-		self.screen.blit(self.img27, (10, 700))
+		self.screen.blit(self.img27, (10, 714))
 		self.screen.blit(self.img28, (329, 788))
 
 		# text map
 		self.screen.blit(self.text, (254, 37))
 		self.screen.blit(self.text2, (67, 330))
 		self.screen.blit(self.text3, (240, 345))
-		self.screen.blit(self.text4, (240, 420))
+		self.screen.blit(self.text4, (285, 440))
 		self.screen.blit(self.text5, (308, 610))
 		self.screen.blit(self.text6, (300, 740))
 
@@ -526,7 +465,66 @@ class Game:
 		for player in self.players:
 			count += 1
 			player.draw(self.screen)
-			self.screen.blit(self.info_font.render("{0}".format(count), 1, self.black), ((player.rect.x + 6), (player.rect.y + 4)))
+			self.screen.blit(self.info_font.render("{0}".format(count), 1, self.black),
+							 ((player.rect.x + 6), (player.rect.y + 4)))
+
+
+		# if dice is thrown
+		if self.thrown > 0:
+			#text handles
+			self.screen.blit(self.dice_font.render("{0}".format(self.thrown), True, self.black), (625, 70))
+			self.screen.blit(self.info_font.render("You have thrown:", True, self.black), (600, 30))
+			if self.thrown < 4 and self.players[self.turn].state == "lock":
+				self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True,self.players[self.turn].kleur), (600, 130))
+				self.screen.blit(self.info_font.render("you need to throw 4 or more".format(self.turn), True,self.black), (600, 145))
+				self.screen.blit(self.info_font.render("to enter Rotterdam centraal!".format(self.turn), True, self.black),(600, 160))
+				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 190))
+
+			#if player on endblock show text to throw 5 or more to enter ship and win
+			elif self.thrown < 5 and self.players[self.turn].state == "end":
+				self.screen.blit(self.info_font.render("you need to throw 5 to enter ship!".format(self.turn), True, self.black),(600, 130))
+				self.screen.blit(self.info_font.render("Press 'Enter' to end turn", True, self.black), (600, 150))
+
+				# display quests block
+				self.Questbar()
+
+			else:
+				if self.players[self.turn].state == "end" and self.thrown >= 5:
+					self.screen.blit(self.info_font.render("You have entered the ship :)", True, self.black),(600, 130))
+					pygame.draw.rect(self.screen, (227, 227, 227), (300, 180, 200, 170))
+				else:
+					self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
+					self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
+
+				# display quests block
+				self.Questbar()
+
+
+		# if dice is not thrown yet-----------------------
+		else:
+			self.screen.blit(pygame.transform.smoothscale(self.dice_img,(50,50)),(610,60))
+			self.screen.blit(self.info_font.render("Player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 25))
+			self.screen.blit(self.info_font.render("throw the dice!", True, (10, 10, 10)),(655, 25))
+
+			# display quests block
+			self.Questbar()
+
+			# show text when players to throw 4 to get into game,
+			if self.players[self.turn].state == "lock":
+				self.screen.blit(self.info_font.render("Throw 4 or more to get",1,self.black),(600,130))
+				self.screen.blit(self.info_font.render("on Rotterdam Centraal!", 1, self.black),(600, 145))
+			# show text when players need to throw 5 to enter ship
+			elif self.thrown < 6 and self.players[self.turn].state == "end":
+				self.screen.blit(
+					self.info_font.render("you need to throw 5 to enter ship!".format(self.turn), True, self.black),(600, 130))
+
+		# if player completed all quests and has 3 questpoints
+		if self.players[self.turn].questpoints >= 3:
+			pygame.draw.rect(self.screen, (227, 227, 227), (600, 370, 200, 100))
+			self.screen.blit(self.info_font.render("You have 3 questspoints!", True, self.black), (620, 390))
+			self.screen.blit(self.info_font.render("Now hurry to the boat", True, self.black), (620, 410))
+			self.screen.blit(self.info_font.render("entrance to escape!", True, self.black), (620, 430))
+
 
 		#update whole screen
 		pygame.display.flip()
@@ -554,8 +552,8 @@ class Game:
 
 							# if first turn 4 or higher set player in rotterdam central to start
 							if self.players[self.turn].state == "lock" and self.thrown > 3:
-								self.players[self.turn].rect.x = 278 #147 #278
-								self.players[self.turn].rect.y = 34 #787 #34
+								self.players[self.turn].rect.x = 147  #147 #278
+								self.players[self.turn].rect.y = 787 #787 #34
 							self.Draw()
 
 							# if player on endblock and throw 5 or more
