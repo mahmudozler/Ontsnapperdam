@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import random
 import copy
+import suprise_card_functions
 pygame.font.init()
 
 pygame.init()
@@ -21,7 +22,8 @@ class Player:
 		self.endblock = pygame.Rect(119, 759, 25, 25)
 		self.quests = []
 		self.state = "lock"
-		self.questpoints = 3 #0
+		self.suprise = 0
+		self.questpoints = 0 #0
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
@@ -73,12 +75,17 @@ class Player:
 					for rectangle in battleblocks:
 						if newpos.colliderect(rectangle):
 							print("LETS BATTLE!")
+							sound = pygame.mixer.Sound('img/battlesound.wav')
+							sound.play()
 							break # stop check when battle block match
 
 					#chek if player in supriseblocks
 					for rectangle in supriseblocks:
 						if newpos.colliderect(rectangle):
-							print("SUPRISEEEE!!")
+							if self.steps == thrown: # if player ends on suprise block
+								print("SUPRISEEEE!!")
+								sound1 = pygame.mixer.Sound('img/questionsound.wav')
+								sound1.play()
 							break # stop check when battle block match
 				
 					#chek if player in policeblocks
@@ -92,12 +99,15 @@ class Player:
 					for rectangle in landmarks:
 						if newpos.colliderect(rectangle[2]):
 							print("LANDMARK HIT")
+							sound2 = pygame.mixer.Sound('img/locationsound.wav')
+							sound2.play()
 							count = 0
 							for quest in self.quests:
 								if newpos.colliderect(quest[2]):
-									self.questpoints += 1
+									#only count questpoint if quest was not doen yet
+									if self.quests[count][1] == 0:
+										self.questpoints += 1
 									self.quests[count][1] = 1
-									print(self.questpoints)
 									break
 								else:
 									count += 1
@@ -109,6 +119,11 @@ class Player:
 
 	def Pos(self):
 		return self.x,self.y
+
+	def suprisePos(self,supriseblocks):
+		for rectangle in supriseblocks:
+			if self.rect.colliderect(rectangle):
+				return True
 
 class Game:
 	def __init__(self,players):
@@ -209,6 +224,9 @@ class Game:
 
 		self.img28 = pygame.image.load('img/fist.png')
 		self.img28= pygame.transform.smoothscale(self.img28,(20,20 ))
+
+		#suprise cards
+		self.suprise_1 = pygame.transform.smoothscale(pygame.image.load('img/suprise_cards/alien.jpg'), (200, 230))
 
 		# Font list
 		self.mapfont = pygame.font.SysFont(None,15)
@@ -318,6 +336,8 @@ class Game:
 			return
 		elif self.thrown < 6 and player.state == "end":
 			return
+		elif player.suprise == 1:
+			return
 
 		self.Draw()
 
@@ -331,6 +351,7 @@ class Game:
 
 				# if all steps made reset dice throw and set turn to next player
 				if player.steps == self.thrown:
+
 					self.thrown = 0
 					if self.turn == (len(self.players) - 1):
 						self.turn = 0
@@ -345,6 +366,11 @@ class Game:
 
 				# if all steps made reset dice throw and set turn to next player
 				if player.steps == self.thrown:
+
+					if player.suprisePos(self.supriseblocks):
+						print("this is so ")
+						player.suprise = 1
+						return
 					self.thrown = 0
 					if self.turn == (len(self.players) - 1):
 						self.turn = 0
@@ -503,6 +529,13 @@ class Game:
 				self.screen.blit(self.info_font.render("to enter Rotterdam centraal!".format(self.turn), True, self.black),(600, 160))
 				self.screen.blit(self.info_font.render("Press for 'Enter' to end your turn", True , self.black),(600, 190))
 
+			#if player comes across surprise card
+			elif self.players[self.turn].suprise == 1:
+				self.Questbar()
+				self.screen.blit(self.info_font.render("You have drawn a surprise card!", True, self.black),(600, 500))
+				self.screen.blit(self.suprise_1,(600,525))
+				self.screen.blit(self.info_font.render("Press 'Enter' to end your turn", True, self.black), (600, 785))
+
 			#if player on endblock show text to throw 5 or more to enter ship and win
 			elif self.thrown < 5 and self.players[self.turn].state == "end":
 				self.screen.blit(self.info_font.render("you need to throw 5 to enter ship!".format(self.turn), True, self.black),(600, 130))
@@ -610,6 +643,16 @@ class Game:
 						else:
 							self.turn = 0
 						self.Draw()
+
+					elif event.key == K_RETURN and self.players[self.turn].suprise == 1:
+						self.thrown = 0
+						self.players[self.turn].suprise = 0
+						self.players[self.turn].steps = 0
+						if self.turn < (len(self.players) - 1):
+							self.turn += 1
+						else:
+							self.turn = 0
+						self.Draw()
 			# ...
 			#pygame.display.flip()
 
@@ -624,14 +667,15 @@ p6 = Player("F",(170,170,170),330,8)
 players = [p1,p2]
 
 game = Game(players)
-print(game.landmarks[0])
-
-for x in game.supriseblocks:
-	print(x)
-
-
-
 game.Gameloop()
+
+
+
+
+
+
+
+
 
 
 

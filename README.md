@@ -20,4 +20,6 @@
 
 **28/01/2017** - Database updated, surprise locations added, Quest check bug fixed(original list changed)
 
-**29/02/2017** - Quest box added, end game added in, first prototype. All PNG compromised of size and metadata
+**29/01/2017** - Quest box added, end game added in, first prototype. All PNG compromised of size and metadata
+
+**30/01/2017** - Sounds added, surprise block added, quest count bug fix, surprise function added 
