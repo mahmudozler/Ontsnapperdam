@@ -57,6 +57,9 @@ class Player:
 					for rectangle in battleblocks:
 						if newpos.colliderect(rectangle):
 							print("LETS BATTLE!")
+							pygame.mixer.music.load('battlesound.mp3')
+							pygame.mixer.music.play(0)
+
 							break # stop check when battle block match
 					# stop check when matched
 					break

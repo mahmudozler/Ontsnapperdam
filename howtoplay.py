@@ -27,7 +27,7 @@ class mainloop:
 		running = True
 		while running:
 			DISPLAYSURF.fill(WHITE)
-			DISPLAYSURF.blit(rulesImg, (75, 30))
+			DISPLAYSURF.blit(rulesImg, (75, 100))
 			DISPLAYSURF.blit(textSurfaceObj, textRectObj)
 			DISPLAYSURF.blit(backImg, (0,0))
 			for event in pygame.event.get():

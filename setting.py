@@ -17,7 +17,8 @@ defaultfont = pygame.font.get_default_font()
 fontrenderer = pygame.font.Font(defaultfont,85)
 screen.fill((255,255,255))
 label = fontrenderer.render("Settings",1,(0,0,0))
-
+pygame.mixer.music.load('song.mp3')
+pygame.mixer.music.play(-1)
 
 class Settings:
 
@@ -35,17 +36,16 @@ class Settings:
             screen.blit(backImg, (0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    pygame.quit()
+                    quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex, mousey = pygame.mouse.get_pos()
                     if width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.30 <= mousey and height * 0.5 >= mousey:
-                        print("geluid aan")
+                        pygame.mixer.music.play(-1)
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.55 <= mousey and height * 0.75 >= mousey:
-                        print("geluid uit")
+                        pygame.mixer.music.stop()
                     elif width * 0.00 <= mousex and width * 0.10 >= mousex and height *0 <= mousey and height * 0.10 >= mousey:
                         self.running = False
-
-
 
 
             pygame.display.flip()
