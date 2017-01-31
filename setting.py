@@ -25,13 +25,9 @@ pygame.mixer.music.play(-1)
 
 class Settings:
 
-    def __init__(self):
-        self.running = True
-
-
     def loop(self):
-
-        while self.running:
+        running = True
+        while running:
             screen.blit(achtergrond1, (0, 0))
             screen.blit(label, (225, 75))
             screen.blit(img1, (width*0.35, height*0.30))
@@ -48,7 +44,7 @@ class Settings:
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.55 <= mousey and height * 0.75 >= mousey:
                         pygame.mixer.music.stop()
                     elif width * 0.00 <= mousex and width * 0.10 >= mousex and height *0 <= mousey and height * 0.10 >= mousey:
-                        self.running = False
+                        running = False
 
 
             pygame.display.flip()

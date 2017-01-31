@@ -12,6 +12,7 @@ import setting
 
 
 
+
 pygame.init()
 width = 800
 height = 850
@@ -92,8 +93,7 @@ class start:
                     elif width-100 <= mousex and width >= mousex and 15 <= mousey and 50 >= mousey:
                         sett.loop()
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.55 <= mousey and height * 0.633 >= mousey:
-                        #highscores.introo()
-                        print("hoi")
+                        highscores1.introo()
                     elif width * 0.35 <= mousex and width * 0.60 >= mousex and height * 0.65 <= mousey and height * 0.733 >= mousey:
                         how.loop()
 
@@ -106,9 +106,11 @@ menu = start()
 
 termination = Terminate_screen.Termination()
 how = howtoplay.mainloop()
+highscores1 = PythonApplication25.hsscreen()
 sett = setting.Settings()
+
 menu.intro()
-#highscores = PythonApplication25.hsscreen()
+
 
 
 

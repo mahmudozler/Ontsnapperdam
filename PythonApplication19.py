@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import random
 import copy
+import winnerscreen
 #import suprise_card_functions
 pygame.font.init()
 
@@ -563,7 +564,12 @@ class Game:
 				if self.players[self.turn].state == "end" and self.thrown >= 5:
 					self.screen.blit(self.info_font.render("You have entered the ship :)", True, self.black),(600, 130))
 					self.winner.append(self.players[self.turn])
-					pygame.draw.rect(self.screen, self.red, (50, 180, 500, 170))
+					self.running = True
+					Winscreen = winnerscreen.Winner()
+
+					Winscreen.winaar(self.winner[0].name)
+
+
 				else:
 					self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
 					self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
@@ -624,8 +630,8 @@ class Game:
 
 							# if first turn 4 or higher set player in rotterdam central to start
 							if self.players[self.turn].state == "lock" and self.thrown > 3:
-								self.players[self.turn].rect.x = 278 #147 #278
-								self.players[self.turn].rect.y = 34 #787 #34
+								self.players[self.turn].rect.x = 147 #147 #278
+								self.players[self.turn].rect.y = 787 #787 #34
 							self.Draw()
 
 							# if player on endblock and throw 5 or more
