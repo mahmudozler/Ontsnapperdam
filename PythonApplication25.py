@@ -33,8 +33,8 @@ def interact_with_database(command):
  
  
 # Uploads a score into the hiscore table
-def upload_score(name, score):
-    interact_with_database("UPDATE users SET score = {} WHERE name = '{}'")
+def upload_score(name):
+    interact_with_database("UPDATE users SET score = (100) WHERE name = '{}'".format(name))
  
  
 # Downloads score data from database
@@ -122,7 +122,7 @@ class hsscreen:
  
  
     def introo(self):
- 
+        self.running = True
         while self.running:
             screen.blit(bg1,(0,0))
             screen.blit(label3,(200,15))
@@ -137,7 +137,8 @@ class hsscreen:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                    Game(players)
+                    pygame.quit()
+                    quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mousex, mousey = pygame.mouse.get_pos()
                     if mousex > 50 and mousex < 150 and mousey > 700 and mousey < 800:
@@ -146,3 +147,5 @@ class hsscreen:
  
             pygame.display.flip()
  
+#hs = hsscreen()
+#hs.introo()
