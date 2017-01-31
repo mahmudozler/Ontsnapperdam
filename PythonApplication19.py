@@ -3,6 +3,8 @@ from pygame.locals import *
 import random
 import copy
 import winnerscreen
+import PythonApplication25
+
 #import suprise_card_functions
 pygame.font.init()
 
@@ -566,7 +568,6 @@ class Game:
 					self.winner.append(self.players[self.turn])
 					self.running = True
 					Winscreen = winnerscreen.Winner()
-
 					Winscreen.winaar(self.winner[0].name)
 
 
@@ -686,6 +687,8 @@ p5 = Player("E",(234,184,46),304,8)
 p6 = Player("F",(170,170,170),330,8)
 
 players = [p1,p2]
+
+
 
 """game = Game(players)
 game.Gameloop()"""
