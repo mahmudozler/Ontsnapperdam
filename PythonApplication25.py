@@ -103,12 +103,12 @@ font = pygame.font.SysFont(None, 40)
 #---------------------------------------------------------------------------
  
 #gameboard background
-bg = pygame.image.load('speelbord.png')
+bg = pygame.image.load('img/speelbord.png')
 bg1 = pygame.transform.smoothscale(bg,(width,height))
 screen = pygame.display.set_mode((width,height))
  
 #back button
-img5 = pygame.image.load('back.png')
+img5 = pygame.image.load('img/back.png')
 img6 = pygame.transform.smoothscale(img5,(200, 70))
  
 defaultfont = pygame.font.get_default_font()

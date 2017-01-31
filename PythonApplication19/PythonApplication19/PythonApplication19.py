@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 import random
 import copy
-import suprise_card_functions
+#import suprise_card_functions
 pygame.font.init()
 
 pygame.init()
@@ -624,8 +624,8 @@ class Game:
 
 							# if first turn 4 or higher set player in rotterdam central to start
 							if self.players[self.turn].state == "lock" and self.thrown > 3:
-								self.players[self.turn].rect.x = 147 #147 #278
-								self.players[self.turn].rect.y = 787 #787 #34
+								self.players[self.turn].rect.x = 278 #147 #278
+								self.players[self.turn].rect.y = 34 #787 #34
 							self.Draw()
 
 							# if player on endblock and throw 5 or more
@@ -681,8 +681,8 @@ p6 = Player("F",(170,170,170),330,8)
 
 players = [p1,p2]
 
-game = Game(players)
-game.Gameloop()
+"""game = Game(players)
+game.Gameloop()"""
 
 
 

@@ -5,10 +5,11 @@ import time
 import random
 import PythonApplication19
 from PythonApplication19 import *
+import PythonApplication25
 import Terminate_screen
 import howtoplay
 import setting
-#import PythonApplication25
+
 
 
 pygame.init()
