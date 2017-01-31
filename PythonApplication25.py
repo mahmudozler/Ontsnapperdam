@@ -32,9 +32,13 @@ def interact_with_database(command):
  
  
  
-# Uploads a score into the hiscore table
-def upload_score(name):
-    interact_with_database("UPDATE users SET score = (100) WHERE name = '{}'".format(name))
+# Update score of a user
+def upload_score(score,name):
+    interact_with_database("UPDATE users SET score = ({0}) WHERE name = '{1}'".format(score,name))
+
+# select score from a user
+def download_score(name):
+    return interact_with_database("SELECT score FROM users WHERE name = '{}'".format(name))
  
  
 # Downloads score data from database

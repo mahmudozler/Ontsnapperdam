@@ -566,6 +566,9 @@ class Game:
 				if self.players[self.turn].state == "end" and self.thrown >= 5:
 					self.screen.blit(self.info_font.render("You have entered the ship :)", True, self.black),(600, 130))
 					self.winner.append(self.players[self.turn])
+					score = PythonApplication25.download_score(self.winner[0].name)
+					new_score = score[0][0] + 5
+					PythonApplication25.upload_score(new_score,self.winner[0].name)
 					self.running = True
 					Winscreen = winnerscreen.Winner()
 					Winscreen.winaar(self.winner[0].name)
@@ -679,12 +682,12 @@ class Game:
 			#pygame.display.flip()
 
 
-p1 = Player("A",(224,60,31),200,8)
-p2 = Player("B",(16,209,84),226,8)
-p3 = Player("C",(16,112,209),252,8)
-p4 = Player("D",(140,99,170),278,8)
-p5 = Player("E",(234,184,46),304,8)
-p6 = Player("F",(170,170,170),330,8)
+p1 = Player("Lord Satrya",(224,60,31),200,8)
+p2 = Player("Cursed Mahmut",(16,209,84),226,8)
+p3 = Player("Danger Perry",(16,112,209),252,8)
+p4 = Player("Brede Mike",(140,99,170),278,8)
+p5 = Player("Lillith Naga Shane",(234,184,46),304,8)
+
 
 players = [p1,p2]
 

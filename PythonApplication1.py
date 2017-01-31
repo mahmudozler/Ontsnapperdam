@@ -1,9 +1,12 @@
 import PythonApplication25
 
-PythonApplication25.download_scores()
+score = PythonApplication25.download_score('Brede Mike')
+#score = PythonApplication25.download_score()
+#score[0][0] = (int(score[0][0]) + 1)
+print(score[0][0])
 
-winner = "Danger Perry"
 
-PythonApplication25.upload_score(winner)
+
+#PythonApplication25.upload_score(winner)
 
 
