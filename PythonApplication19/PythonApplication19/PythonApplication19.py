@@ -23,7 +23,7 @@ class Player:
 		self.quests = []
 		self.state = "lock"
 		self.suprise = 0
-		self.questpoints = 0 #0
+		self.questpoints = 3 #0
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
@@ -133,6 +133,7 @@ class Game:
 		self.thrown = 0
 		self.size = (850,850)
 		self.running = False
+		self.winner = []
 		self.landmarks = []
 		self.landmark_namelist = [["hilton hotel",0],["de doelen",0],["luxor theater",0],["bijenkorf",0],["kfc",0],["coffeeshop amigo",0],["abn amro",0],["janzen huizen",0],["kabouter buttplug",0],
 		["wok to go",0],["hogeschool rotterdam",0],["kfc binnenweg",0],["inntel hotel",0],["museumpark orientalis",0],["erasmus mc",0],["amazing oriental",0],["euromast",0],["kunsthall rotterdam",0]]
@@ -228,6 +229,9 @@ class Game:
 		#suprise cards
 		self.suprise_1 = pygame.transform.smoothscale(pygame.image.load('img/suprise_cards/alien.jpg'), (200, 230))
 
+		# list with all suprisecards to pick from
+		self.suprise_cards = [self.suprise_1]
+
 		# Font list
 		self.mapfont = pygame.font.SysFont(None,15)
 		self.landmark_font = pygame.font.SysFont(None, 30)
@@ -285,6 +289,13 @@ class Game:
 					self.battleblocks.append(
 						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
 									self.w, self.h))
+
+					# create list with all suprise card blocks positions that are in the battlezones
+					if self.Filter(col, row, self.suprise_cards):
+						self.supriseblocks.append(
+							pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
+										self.w, self.h))
+
 				elif self.Filter(col, row,self.map_list):
 					self.blocks.append(
 						pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
@@ -295,6 +306,7 @@ class Game:
 						self.landmarkblocks.append(
 							pygame.Rect((self.w + self.m) * col + self.m + 40, ((self.h + self.m) * row + self.m + 30),
 										self.w, self.h))
+
 					#create list with all suprise card blocks positions
 					if self.Filter(col, row,self.suprise_cards):
 						self.supriseblocks.append(
@@ -337,6 +349,9 @@ class Game:
 		elif self.thrown < 6 and player.state == "end":
 			return
 		elif player.suprise == 1:
+			return
+		elif len(self.winner) == 1:
+			print("winner chosen")
 			return
 
 		self.Draw()
@@ -547,7 +562,8 @@ class Game:
 			else:
 				if self.players[self.turn].state == "end" and self.thrown >= 5:
 					self.screen.blit(self.info_font.render("You have entered the ship :)", True, self.black),(600, 130))
-					pygame.draw.rect(self.screen, (227, 227, 227), (300, 180, 200, 170))
+					self.winner.append(self.players[self.turn])
+					pygame.draw.rect(self.screen, self.red, (50, 180, 500, 170))
 				else:
 					self.screen.blit(self.info_font.render("player {0} ".format((self.turn + 1)), True, self.players[self.turn].kleur), (600, 130))
 					self.screen.blit(self.info_font.render("may walk {0} steps".format(self.thrown), True,self.black), (655, 130))
@@ -608,8 +624,8 @@ class Game:
 
 							# if first turn 4 or higher set player in rotterdam central to start
 							if self.players[self.turn].state == "lock" and self.thrown > 3:
-								self.players[self.turn].rect.x = 278 #147 #278
-								self.players[self.turn].rect.y = 34 #787 #34
+								self.players[self.turn].rect.x = 147 #147 #278
+								self.players[self.turn].rect.y = 787 #787 #34
 							self.Draw()
 
 							# if player on endblock and throw 5 or more
@@ -622,9 +638,8 @@ class Game:
 
 				# execute if dice is thrown
 				if event.type == pygame.KEYDOWN:
-					if self.thrown > 0:
+					if self.thrown > 0 and len(self.winner) == 0:
 						self.Update(event)
-
 						self.Draw()
 
 					#if players throw below 4 in first turn, push turn to next player
@@ -636,7 +651,7 @@ class Game:
 							self.turn = 0
 						self.Draw()
 
-					elif event.key == K_RETURN and self.thrown > 0 and self.players[self.turn].state == "end":
+					elif event.key == K_RETURN and self.thrown > 0 and self.players[self.turn].state == "end" and len(self.winner) == 0:
 						self.thrown = 0
 						if self.turn < (len(self.players) - 1):
 							self.turn += 1
