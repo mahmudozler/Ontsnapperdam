@@ -693,8 +693,8 @@ players = [p1,p2]
 
 
 
-"""game = Game(players)
-game.Gameloop()"""
+#game = Game(players)
+#game.Gameloop()
 
 
 

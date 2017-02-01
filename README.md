@@ -23,3 +23,5 @@
 **29/01/2017** - Quest box added, end game added in, first prototype. All PNG compromised of size and metadata
 
 **30/01/2017** - Sounds added, surprise block added, quest count bug fix, surprise function added 
+
+**30/01/2017** - Endgame implemented, if winner increment player score in database, winner screen added, minor bug fixes
