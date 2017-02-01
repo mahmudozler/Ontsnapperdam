@@ -648,7 +648,7 @@ class Game:
 					if mousex > 600 and mousex < 670 and mousey > 50 and mousey < 120:
 						print("its turn: " + str(self.turn))
 						if self.thrown == 0:
-							self.picked_card = random.randint(1, 2) #suprise card pick
+							self.picked_card = random.randint(1, 5) #suprise card pick
 							self.thrown = random.randint(1, 6)
 
 							#If lower than 4 turn to next player
