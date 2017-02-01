@@ -4,8 +4,6 @@ import random
 import copy
 import winnerscreen
 import PythonApplication25
-
-#import suprise_card_functions
 pygame.font.init()
 
 pygame.init()
@@ -26,12 +24,12 @@ class Player:
 		self.quests = []
 		self.state = "lock"
 		self.suprise = 0
-		self.questpoints = 3 #0
+		self.questpoints = 0 #0
 
 	def draw(self,screen):
 		pygame.draw.circle(screen,self.kleur,(self.rect.center),self.r)
 
-	def Update(self,screen,event,blocks,battleblocks,landmarks,supriseblocks,policeblocks,thrown):
+	def Update(self,screen,event,blocks,battleblocks,landmarks,supriseblocks,policeblocks,thrown,picked_card):
 		if event.type == pygame.KEYDOWN:
 			# to check the new position is within the game blocks
 			newpos = self.rect.copy()
@@ -86,9 +84,10 @@ class Player:
 					for rectangle in supriseblocks:
 						if newpos.colliderect(rectangle):
 							if self.steps == thrown: # if player ends on suprise block
-								print("SUPRISEEEE!!")
-								sound1 = pygame.mixer.Sound('img/questionsound.wav')
-								sound1.play()
+								if picked_card != 1:
+									print("SUPRISEEEE!!")
+									sound1 = pygame.mixer.Sound('img/questionsound.wav')
+									sound1.play()
 							break # stop check when battle block match
 				
 					#chek if player in policeblocks
@@ -139,7 +138,7 @@ class Game:
 		self.winner = []
 		self.landmarks = []
 		self.landmark_namelist = [["hilton hotel",0],["de doelen",0],["luxor theater",0],["bijenkorf",0],["kfc",0],["coffeeshop amigo",0],["abn amro",0],["janzen huizen",0],["kabouter buttplug",0],
-		["wok to go",0],["hogeschool rotterdam",0],["kfc binnenweg",0],["inntel hotel",0],["museumpark orientalis",0],["erasmus mc",0],["amazing oriental",0],["euromast",0],["kunsthall rotterdam",0]]
+		["wok to go",0],["hogeschool rotterdam",0],["de rotterdammer",0],["inntel hotel",0],["museumpark orientalis",0],["erasmus mc",0],["amazing oriental",0],["euromast",0],["kunsthall rotterdam",0]]
 
 		# Load game pic locations
 		self.dice_img = pygame.image.load('img/dice_throw.png')
@@ -229,11 +228,15 @@ class Game:
 		self.img28 = pygame.image.load('img/fist.png')
 		self.img28= pygame.transform.smoothscale(self.img28,(20,20 ))
 
-		#suprise cards
-		self.suprise_1 = pygame.transform.smoothscale(pygame.image.load('img/suprise_cards/alien.jpg'), (200, 230))
+		self.img29 = pygame.image.load('img/rotterdammer.png')
+		self.img29 = pygame.transform.smoothscale(self.img29, (55, 55))
 
-		# list with all suprisecards to pick from
-		self.suprise_cards = [self.suprise_1]
+		#suprise cards
+		self.suprise_1 = pygame.transform.smoothscale(pygame.image.load('img/suprise_cards/alien.jpg'),(200,230))
+		self.suprise_2 = pygame.transform.smoothscale(pygame.image.load('img/suprise_cards/trump.jpg'),(200,230))
+		self.suprise_3 = pygame.transform.smoothscale(pygame.image.load('img/suprise_cards/travesty.jpg'), (200, 230))
+		self.suprise_4 = pygame.transform.smoothscale(pygame.image.load('img/suprise_cards/coffee.jpg'), (200, 230))
+		self.suprise_5 = pygame.transform.smoothscale(pygame.image.load('img/suprise_cards/howbadah.jpg'), (200, 230))
 
 		# Font list
 		self.mapfont = pygame.font.SysFont(None,15)
@@ -250,6 +253,7 @@ class Game:
 		self.text4 = self.mapfont.render("Kabouter Buttplug",True,(0,0,0))
 		self.text5 = self.mapfont.render("Museumpark",True,(0,0,0))
 		self.text6 = self.mapfont.render("Euromast",True,(0,0,0))
+		self.text8 = self.mapfont.render("Rotterdammer", True, (0, 0, 0))
 		self.text1 = self.landmark_font.render("L", True, (0, 0, 0))
 
 		#!?(surprise cards)
@@ -365,7 +369,7 @@ class Game:
 			player.state = "start"
 
 			if event.type == pygame.KEYDOWN:
-				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks,self.supriseblocks,self.policeblocks, self.thrown)
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks,self.supriseblocks,self.policeblocks, self.thrown, self.picked_card)
 
 				# if all steps made reset dice throw and set turn to next player
 				if player.steps == self.thrown:
@@ -380,7 +384,7 @@ class Game:
 		# player throw regular process after start
 		else:
 			if event.type == pygame.KEYDOWN:
-				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks,self.supriseblocks,self.policeblocks, self.thrown)
+				player.Update(self.screen, event, (self.blocks + self.battleblocks), self.battleblocks,self.landmarks,self.supriseblocks,self.policeblocks, self.thrown, self.picked_card)
 
 				# if all steps made reset dice throw and set turn to next player
 				if player.steps == self.thrown:
@@ -454,7 +458,7 @@ class Game:
 		self.screen.blit(self.img16, (415, 450))
 		self.screen.blit(self.img17, (505, 522))
 		self.screen.blit(self.img18, (276, 551))
-		self.screen.blit(self.img8, (130, 550))
+		self.screen.blit(self.img29, (130, 527))
 		self.screen.blit(self.img19, (70, 630))
 		self.screen.blit(self.img20, (296, 625))
 		self.screen.blit(self.img20, (324, 625))
@@ -477,6 +481,7 @@ class Game:
 		self.screen.blit(self.text4, (285, 440))
 		self.screen.blit(self.text5, (308, 610))
 		self.screen.blit(self.text6, (300, 740))
+		self.screen.blit(self.text8, (185, 550))
 
 		# L
 		self.screen.blit(self.text1, (542, 87))
@@ -527,6 +532,7 @@ class Game:
 		self.screen.blit(self.text7, (305, 788))
 		self.screen.blit(self.text7, (512, 788))
 
+
 		# draw all player
 		count = 0
 		for player in self.players:
@@ -551,7 +557,23 @@ class Game:
 			elif self.players[self.turn].suprise == 1:
 				self.Questbar()
 				self.screen.blit(self.info_font.render("You have drawn a surprise card!", True, self.black),(600, 500))
-				self.screen.blit(self.suprise_1,(600,525))
+
+				# print the surprise card that was picked
+				if self.picked_card == 1:
+					self.screen.blit(self.suprise_5, (600, 525))
+					if self.picked_card == 1:
+						sound = pygame.mixer.Sound('img/hobodah.wav')
+						sound.play()
+				elif self.picked_card == 2:
+					self.screen.blit(self.suprise_2, (600, 525))
+				elif self.picked_card == 3:
+					self.screen.blit(self.suprise_3, (600, 525))
+				elif self.picked_card == 4:
+					self.screen.blit(self.suprise_4, (600, 525))
+				elif self.picked_card == 5:
+					self.screen.blit(self.suprise_1, (600, 525))
+
+
 				self.screen.blit(self.info_font.render("Press 'Enter' to end your turn", True, self.black), (600, 785))
 
 			#if player on endblock show text to throw 5 or more to enter ship and win
@@ -626,6 +648,7 @@ class Game:
 					if mousex > 600 and mousex < 670 and mousey > 50 and mousey < 120:
 						print("its turn: " + str(self.turn))
 						if self.thrown == 0:
+							self.picked_card = random.randint(1, 2) #suprise card pick
 							self.thrown = random.randint(1, 6)
 
 							#If lower than 4 turn to next player
@@ -634,8 +657,8 @@ class Game:
 
 							# if first turn 4 or higher set player in rotterdam central to start
 							if self.players[self.turn].state == "lock" and self.thrown > 3:
-								self.players[self.turn].rect.x = 147 #147 #278
-								self.players[self.turn].rect.y = 787 #787 #34
+								self.players[self.turn].rect.x = 278 #147 #278
+								self.players[self.turn].rect.y = 34 #787 #34
 							self.Draw()
 
 							# if player on endblock and throw 5 or more
@@ -670,6 +693,7 @@ class Game:
 						self.Draw()
 
 					elif event.key == K_RETURN and self.players[self.turn].suprise == 1:
+						self.picked_card = 0
 						self.thrown = 0
 						self.players[self.turn].suprise = 0
 						self.players[self.turn].steps = 0

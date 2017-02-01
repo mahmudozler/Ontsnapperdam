@@ -24,4 +24,6 @@
 
 **30/01/2017** - Sounds added, surprise block added, quest count bug fix, surprise function added 
 
-**30/01/2017** - Endgame implemented, if winner increment player score in database, winner screen added, minor bug fixes
+**31/01/2017** - Endgame implemented, if winner increment player score in database, winner screen added, minor bug fixes
+
+**01/02/2016** - surprise cards added, images png profiles fixed, kfc duplicate replaced with rotterdammer,how bou da
